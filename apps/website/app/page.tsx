@@ -1,8 +1,4 @@
-import {
-  type ResolvedMaterialIcon,
-  resolveMaterialIcon,
-  resolveMaterialIconByLanguageId,
-} from "path-icon";
+import { type PathIcon, getIcon, getIconByLanguageId } from "path-icon";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { Code } from "./_components/code";
@@ -12,68 +8,58 @@ import { InstallCommand } from "./_components/install-command";
 const NPM_URL = siteConfig.npm;
 const REPO_URL = siteConfig.repo;
 
-const USAGE = `import { resolveMaterialIcon } from "path-icon";
+const USAGE = `import { getIcon } from "path-icon";
 
-const icon = resolveMaterialIcon("src/index.ts");
+const icon = getIcon("src/index.ts");
 // icon.name     → "typescript"
 // icon.filename → "typescript.svg"
-// icon.cdnUrl   → "https://cdn.jsdelivr.net/.../icons/typescript.svg"
+// icon.url   → "https://cdn.jsdelivr.net/.../icons/typescript.svg"
 // icon.source   → "fileExtensions"`;
 
-const EXAMPLES: { call: string; result: ResolvedMaterialIcon | null }[] = [
+const EXAMPLES: { call: string; result: PathIcon | null }[] = [
   {
-    call: 'resolveMaterialIcon("src/index.ts")',
-    result: resolveMaterialIcon("src/index.ts"),
+    call: 'getIcon("src/index.ts")',
+    result: getIcon("src/index.ts"),
   },
   {
-    call: 'resolveMaterialIcon("package.json")',
-    result: resolveMaterialIcon("package.json"),
+    call: 'getIcon("package.json")',
+    result: getIcon("package.json"),
   },
   {
-    call: 'resolveMaterialIcon("src/app.test.ts")',
-    result: resolveMaterialIcon("src/app.test.ts"),
+    call: 'getIcon("src/app.test.ts")',
+    result: getIcon("src/app.test.ts"),
   },
   {
-    call: 'resolveMaterialIcon("src", { type: "folder" })',
-    result: resolveMaterialIcon("src", { type: "folder" }),
+    call: 'getIcon("src", { type: "folder" })',
+    result: getIcon("src", { type: "folder" }),
   },
   {
-    call: 'resolveMaterialIcon("src", { type: "folder", open: true })',
-    result: resolveMaterialIcon("src", { type: "folder", open: true }),
+    call: 'getIcon("src", { type: "folder", open: true })',
+    result: getIcon("src", { type: "folder", open: true }),
   },
   {
-    call: 'resolveMaterialIconByLanguageId("rust")',
-    result: resolveMaterialIconByLanguageId("rust"),
+    call: 'getIconByLanguageId("rust")',
+    result: getIconByLanguageId("rust"),
   },
 ];
 
 const API: { signature: string; returns?: string; description: string }[] = [
   {
-    signature: "resolveMaterialIcon(path, options?)",
-    returns: "ResolvedMaterialIcon | null",
+    signature: "getIcon(path, options?)",
+    returns: "PathIcon | null",
     description:
       "Resolve a file or folder path to its icon name, SVG filename, CDN URL, and match source.",
   },
   {
-    signature: "resolveMaterialIconByLanguageId(languageId, options?)",
-    returns: "ResolvedMaterialIcon | null",
+    signature: "getIconByLanguageId(languageId, options?)",
+    returns: "PathIcon | null",
     description:
       "Resolve from a VS Code language ID such as rust or shellscript.",
   },
   {
-    signature: "getMaterialIconName(path, options?)",
-    returns: "string | null",
-    description: "Return only the icon name.",
-  },
-  {
-    signature: "getMaterialIconCdnUrl(path, options?)",
-    returns: "string | null",
-    description: "Return only the SVG URL.",
-  },
-  {
-    signature: 'import { resolveMaterialFileIcon } from "path-icon/file";',
+    signature: 'import { getFileIcon } from "path-icon/file";',
     description:
-      "Split entries load only the file or folder tables. /folder exports resolveMaterialFolderIcon.",
+      "Split entries load only the file or folder tables. /folder exports getFolderIcon.",
   },
 ];
 
@@ -110,7 +96,7 @@ const OPTIONS: {
     name: "cdn",
     type: '"jsdelivr" | "unpkg"',
     defaultValue: '"jsdelivr"',
-    description: "CDN used to build cdnUrl.",
+    description: "CDN used to build url.",
   },
   {
     name: "version",
@@ -207,7 +193,7 @@ export default function Home() {
                 <span className="flex shrink-0 items-center gap-2 text-muted-foreground">
                   {/* biome-ignore lint/performance/noImgElement: external CDN, no Next optimizer needed */}
                   <img
-                    src={result.cdnUrl}
+                    src={result.url}
                     alt=""
                     loading="lazy"
                     className="size-4"

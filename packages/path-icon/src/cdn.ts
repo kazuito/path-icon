@@ -10,8 +10,8 @@ export const MATERIAL_ICON_THEME_PACKAGE = "material-icon-theme";
 /**
  * Build a CDN URL for a Material Icon Theme SVG.
  *
- * You usually don't need to call this directly — {@link resolveMaterialIcon}
- * already returns a `cdnUrl`. Use it when you have a filename in hand and just
+ * You usually don't need to call this directly — {@link getIcon}
+ * already returns a `url`. Use it when you have a filename in hand and just
  * want the URL.
  *
  * @example
@@ -41,12 +41,12 @@ export function buildCdnUrl(input: {
  *
  * @example
  * ```ts
- * buildBaseUrl("/icons", "typescript.svg");      // "/icons/typescript.svg"
- * buildBaseUrl("/icons/", "typescript.svg");     // "/icons/typescript.svg"
- * buildBaseUrl("https://cdn.example.com/i", "typescript.svg");
+ * joinBaseUrl("/icons", "typescript.svg");      // "/icons/typescript.svg"
+ * joinBaseUrl("/icons/", "typescript.svg");     // "/icons/typescript.svg"
+ * joinBaseUrl("https://cdn.example.com/i", "typescript.svg");
  * // "https://cdn.example.com/i/typescript.svg"
  * ```
  */
-export function buildBaseUrl(baseUrl: string, filename: string): string {
+export function joinBaseUrl(baseUrl: string, filename: string): string {
   return `${baseUrl.replace(/\/$/, "")}/${filename}`;
 }

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  metadata,
-  type ResolveMaterialIconOptions,
-  resolveMaterialIcon,
-} from "path-icon";
+import { metadata, type IconOptions, getIcon } from "path-icon";
 import {
   parseAsBoolean,
   parseAsString,
@@ -47,14 +43,14 @@ export function IconResolver() {
       if (!cleanPath) {
         return { raw, type, result: null };
       }
-      const opts: ResolveMaterialIconOptions = {
+      const opts: IconOptions = {
         type,
         cdn,
         fallback: fb,
         open,
       };
       if (version) opts.version = version;
-      const result = resolveMaterialIcon(cleanPath, opts);
+      const result = getIcon(cleanPath, opts);
       return { raw, type, result };
     });
   }, [paths, cdn, fallback, version, open]);

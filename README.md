@@ -10,9 +10,9 @@ Find the [Material Icon Theme](https://github.com/material-extensions/vscode-mat
 **[Website](https://path-icon.vercel.app)** · **[Playground](https://path-icon.vercel.app/playground)** · **[llms.txt](https://path-icon.vercel.app/llms.txt)** · **[npm](https://www.npmjs.com/package/path-icon)**
 
 ```ts
-import { getMaterialIconCdnUrl } from "path-icon";
+import { getIcon } from "path-icon";
 
-getMaterialIconCdnUrl("src/index.ts");
+getIcon("src/index.ts")?.url;
 // "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
 ```
 
@@ -56,14 +56,14 @@ bun add path-icon
 Deno:
 
 ```ts
-import { resolveMaterialIcon } from "npm:path-icon";
+import { getIcon } from "npm:path-icon";
 ```
 
 Browser without a bundler (ES module from a CDN):
 
 ```html
 <script type="module">
-  import { resolveMaterialIcon } from "https://cdn.jsdelivr.net/npm/path-icon/+esm";
+  import { getIcon } from "https://cdn.jsdelivr.net/npm/path-icon/+esm";
 </script>
 ```
 
@@ -74,13 +74,13 @@ Browser without a bundler (ES module from a CDN):
 ### Resolve a file
 
 ```ts
-import { resolveMaterialIcon } from "path-icon";
+import { getIcon } from "path-icon";
 
-resolveMaterialIcon("src/index.ts");
+getIcon("src/index.ts");
 // {
 //   name: "typescript",
 //   filename: "typescript.svg",
-//   cdnUrl: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg",
+//   url: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg",
 //   type: "file",
 //   source: "fileExtensions",
 // }
@@ -91,39 +91,27 @@ resolveMaterialIcon("src/index.ts");
 Pass `type: "folder"`. Pass `open: true` for the expanded variant.
 
 ```ts
-resolveMaterialIcon("src", { type: "folder" });
+getIcon("src", { type: "folder" });
 // { name: "folder-src", filename: "folder-src.svg", type: "folder", source: "folderNames", ... }
 
-resolveMaterialIcon("src", { type: "folder", open: true });
+getIcon("src", { type: "folder", open: true });
 // { name: "folder-src", filename: "folder-src-open.svg", ... }
 ```
 
 ### Resolve a language ID
 
 ```ts
-import { resolveMaterialIconByLanguageId } from "path-icon";
+import { getIconByLanguageId } from "path-icon";
 
-resolveMaterialIconByLanguageId("rust");
+getIconByLanguageId("rust");
 // { name: "rust", filename: "rust.svg", type: "file", source: "languageIds", ... }
 ```
 
 You can also pass `languageId` alongside a path as a fallback hint. It is used only when the path itself doesn't match a specific filename or extension:
 
 ```ts
-resolveMaterialIcon("scratch.unknown-ext", { languageId: "rust" }); // → rust (path missed, languageId used)
-resolveMaterialIcon("package.json", { languageId: "rust" });        // → nodejs (filename match wins)
-```
-
-### Just the name or the URL
-
-```ts
-import { getMaterialIconName, getMaterialIconCdnUrl } from "path-icon";
-
-getMaterialIconName("package.json");
-// "nodejs"
-
-getMaterialIconCdnUrl("package.json");
-// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/nodejs.svg"
+getIcon("scratch.unknown-ext", { languageId: "rust" }); // → rust (path missed, languageId used)
+getIcon("package.json", { languageId: "rust" });        // → nodejs (filename match wins)
 ```
 
 ## How it works
@@ -138,12 +126,12 @@ lookup tables (generated from material-icon-theme@5.39.0, bundled in this packag
 icon name "react_ts"
    │  + "-open" for expanded folders, + ".svg"
    ▼
-{ name, filename, cdnUrl, type, source }
+{ name, filename, url, type, source }
 ```
 
 1. The path is treated as a plain string and never touched on disk.
 2. It is matched against lookup tables generated from the upstream theme's source (`fileIcons.ts`, `folderIcons.ts`, `languageIcons.ts`). The tables ship inside this package, so no network request happens at resolve time.
-3. The icon name becomes an SVG filename and a URL. Only your `<img>` tag (or whatever loads `cdnUrl`) touches the network.
+3. The icon name becomes an SVG filename and a URL. Only your `<img>` tag (or whatever loads `url`) touches the network.
 
 Every result includes a `source` field that says which table matched. That is handy for debugging or for showing a "generic icon" state in your UI.
 
@@ -152,18 +140,18 @@ Every result includes a `source` field that says which table matched. That is ha
 ### Render an icon
 
 ```tsx
-import { resolveMaterialIcon } from "path-icon";
+import { getIcon } from "path-icon";
 
 function FileIcon({ path, isDir = false, isOpen = false }: {
   path: string;
   isDir?: boolean;
   isOpen?: boolean;
 }) {
-  const icon = resolveMaterialIcon(path, {
+  const icon = getIcon(path, {
     type: isDir ? "folder" : "file",
     open: isOpen,
   })!; // never null with the default fallback
-  return <img src={icon.cdnUrl} alt="" width={16} height={16} />;
+  return <img src={icon.url} alt="" width={16} height={16} />;
 }
 ```
 
@@ -175,11 +163,11 @@ type Node = { name: string; path: string; children?: Node[] };
 function Tree({ node, expanded }: { node: Node; expanded: Set<string> }) {
   const isDir = node.children !== undefined;
   const isOpen = expanded.has(node.path);
-  const icon = resolveMaterialIcon(node.path, { type: isDir ? "folder" : "file", open: isOpen })!;
+  const icon = getIcon(node.path, { type: isDir ? "folder" : "file", open: isOpen })!;
 
   return (
     <li>
-      <img src={icon.cdnUrl} alt="" width={16} height={16} /> {node.name}
+      <img src={icon.url} alt="" width={16} height={16} /> {node.name}
       {isDir && isOpen && (
         <ul>
           {node.children!.map((child) => (
@@ -200,15 +188,15 @@ Monaco models often have synthetic URIs like `inmemory://model/1`. Use the model
 
 ```ts
 import {
-  resolveMaterialIcon,
-  resolveMaterialIconByLanguageId,
+  getIcon,
+  getIconByLanguageId,
 } from "path-icon";
 
 // Path is meaningful: use it, with the language ID as a fallback hint
-const icon = resolveMaterialIcon(model.uri.path, { languageId: model.getLanguageId() });
+const icon = getIcon(model.uri.path, { languageId: model.getLanguageId() });
 
 // Path is meaningless: resolve from the language ID alone
-const icon2 = resolveMaterialIconByLanguageId(model.getLanguageId());
+const icon2 = getIconByLanguageId(model.getLanguageId());
 ```
 
 ### Detect "no specific icon"
@@ -216,8 +204,8 @@ const icon2 = resolveMaterialIconByLanguageId(model.getLanguageId());
 Use `fallback: "none"` to get `null` instead of the generic icon, or check `source`:
 
 ```ts
-resolveMaterialIcon("data.xyz", { fallback: "none" }); // null
-resolveMaterialIcon("data.xyz")?.source;                // "default"
+getIcon("data.xyz", { fallback: "none" }); // null
+getIcon("data.xyz")?.source;                // "default"
 ```
 
 ### Self-hosting the SVGs
@@ -230,10 +218,10 @@ cp -r node_modules/material-icon-theme/icons public/icons
 ```
 
 ```ts
-getMaterialIconCdnUrl("main.rs", { baseUrl: "/icons" });
+getIcon("main.rs", { baseUrl: "/icons" })?.url;
 // "/icons/rust.svg"
 
-getMaterialIconCdnUrl("main.rs", { baseUrl: "https://assets.example.com/icons/" });
+getIcon("main.rs", { baseUrl: "https://assets.example.com/icons/" })?.url;
 // "https://assets.example.com/icons/rust.svg"
 ```
 
@@ -242,16 +230,16 @@ getMaterialIconCdnUrl("main.rs", { baseUrl: "https://assets.example.com/icons/" 
 The root entry includes both the file and folder tables. If you only need one side, import from a subpath:
 
 ```ts
-import { resolveMaterialFileIcon } from "path-icon/file";
-import { resolveMaterialFolderIcon } from "path-icon/folder";
+import { getFileIcon } from "path-icon/file";
+import { getFolderIcon } from "path-icon/folder";
 
-resolveMaterialFileIcon("src/index.ts");
-resolveMaterialFolderIcon("src", { open: true });
+getFileIcon("src/index.ts");
+getFolderIcon("src", { open: true });
 ```
 
 ```js
 // CommonJS works the same way
-const { resolveMaterialFileIcon } = require("path-icon/file");
+const { getFileIcon } = require("path-icon/file");
 ```
 
 Approximate gzipped size at `5.39.0`, including the lookup data:
@@ -268,69 +256,40 @@ All functions are synchronous and pure. The `path` argument accepts POSIX (`a/b`
 
 ### Root entry (`path-icon`)
 
-#### `resolveMaterialIcon(path, options?)`
+#### `getIcon(path, options?)`
 
 ```ts
-function resolveMaterialIcon(
+function getIcon(
   path: string,
-  options?: ResolveMaterialIconOptions,
-): ResolvedMaterialIcon | null;
+  options?: IconOptions,
+): PathIcon | null;
 ```
 
 Resolve a file or folder path. `options.type` picks the mode (`"file"` by default). Returns `null` only when `fallback: "none"` and nothing matched.
 
 ```ts
-resolveMaterialIcon("Dockerfile")?.name;                           // "docker"
-resolveMaterialIcon("lib.d.ts")?.name;                             // "typescript-def"
-resolveMaterialIcon("node_modules", { type: "folder" })?.name;     // "folder-node"
-resolveMaterialIcon("anything.weird", { fallback: "none" });       // null
+getIcon("Dockerfile")?.name;                           // "docker"
+getIcon("lib.d.ts")?.name;                             // "typescript-def"
+getIcon("node_modules", { type: "folder" })?.name;     // "folder-node"
+getIcon("anything.weird", { fallback: "none" });       // null
 ```
 
-#### `resolveMaterialIconByLanguageId(languageId, options?)`
+#### `getIconByLanguageId(languageId, options?)`
 
 ```ts
-function resolveMaterialIconByLanguageId(
+function getIconByLanguageId(
   languageId: string,
-  options?: ResolveByLanguageIdOptions,
-): ResolvedMaterialIcon | null;
+  options?: LanguageIdOptions,
+): PathIcon | null;
 ```
 
 Resolve a [VS Code language ID](https://code.visualstudio.com/docs/languages/identifiers), matched case-insensitively. The result always has `type: "file"` (or `"folder"` if you explicitly pass `fallback: "folder"` and nothing matches). Accepts `cdn`, `version`, `baseUrl`, `fallback`.
 
 ```ts
-resolveMaterialIconByLanguageId("typescriptreact")?.name;           // "react_ts"
-resolveMaterialIconByLanguageId("shellscript")?.name;               // "console"
-resolveMaterialIconByLanguageId("plaintext")?.name;                 // "document"
-resolveMaterialIconByLanguageId("not-a-language", { fallback: "none" }); // null
-```
-
-#### `getMaterialIconName(path, options?)`
-
-```ts
-function getMaterialIconName(path: string, options?: ResolveMaterialIconOptions): string | null;
-```
-
-Shorthand for `resolveMaterialIcon(path, options)?.name`. The name has no `.svg` extension and no `-open` suffix.
-
-```ts
-getMaterialIconName("package.json");                    // "nodejs"
-getMaterialIconName("src", { type: "folder" });         // "folder-src"
-```
-
-#### `getMaterialIconCdnUrl(path, options?)`
-
-```ts
-function getMaterialIconCdnUrl(path: string, options?: ResolveMaterialIconOptions): string | null;
-```
-
-Shorthand for `resolveMaterialIcon(path, options)?.cdnUrl`.
-
-```ts
-getMaterialIconCdnUrl("package.json");
-// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/nodejs.svg"
-
-getMaterialIconCdnUrl("src/index.ts", { cdn: "unpkg" });
-// "https://unpkg.com/material-icon-theme@5.39.0/icons/typescript.svg"
+getIconByLanguageId("typescriptreact")?.name;           // "react_ts"
+getIconByLanguageId("shellscript")?.name;               // "console"
+getIconByLanguageId("plaintext")?.name;                 // "document"
+getIconByLanguageId("not-a-language", { fallback: "none" }); // null
 ```
 
 #### `buildCdnUrl({ cdn, version, filename })`
@@ -346,17 +305,17 @@ buildCdnUrl({ cdn: "jsdelivr", version: "5.39.0", filename: "typescript.svg" });
 // "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
 ```
 
-#### `buildBaseUrl(baseUrl, filename)`
+#### `joinBaseUrl(baseUrl, filename)`
 
 ```ts
-function buildBaseUrl(baseUrl: string, filename: string): string;
+function joinBaseUrl(baseUrl: string, filename: string): string;
 ```
 
 Join a base URL and a filename, normalizing one trailing slash.
 
 ```ts
-buildBaseUrl("/icons", "typescript.svg");  // "/icons/typescript.svg"
-buildBaseUrl("/icons/", "typescript.svg"); // "/icons/typescript.svg"
+joinBaseUrl("/icons", "typescript.svg");  // "/icons/typescript.svg"
+joinBaseUrl("/icons/", "typescript.svg"); // "/icons/typescript.svg"
 ```
 
 #### `metadata`
@@ -383,10 +342,8 @@ Also re-exported from the root entry. Doesn't load the folder table.
 
 | Function | Signature |
 | --- | --- |
-| `resolveMaterialFileIcon` | `(path, options?: ResolveMaterialFileIconOptions) => ResolvedMaterialIcon \| null` |
-| `resolveMaterialFileIconByLanguageId` | `(languageId, options?: ResolveFileByLanguageIdOptions) => ResolvedMaterialIcon \| null` |
-| `getMaterialFileIconName` | `(path, options?: ResolveMaterialFileIconOptions) => string \| null` |
-| `getMaterialFileIconCdnUrl` | `(path, options?: ResolveMaterialFileIconOptions) => string \| null` |
+| `getFileIcon` | `(path, options?: FileIconOptions) => PathIcon \| null` |
+| `getFileIconByLanguageId` | `(languageId, options?: FileLanguageIdOptions) => PathIcon \| null` |
 
 File options: `cdn`, `version`, `baseUrl`, `languageId` (path functions only), and `fallback: "file" | "none"` (default `"file"`).
 
@@ -396,52 +353,50 @@ Also re-exported from the root entry. Doesn't load the file table.
 
 | Function | Signature |
 | --- | --- |
-| `resolveMaterialFolderIcon` | `(path, options?: ResolveMaterialFolderIconOptions) => ResolvedMaterialIcon \| null` |
-| `getMaterialFolderIconName` | `(path, options?: ResolveMaterialFolderIconOptions) => string \| null` |
-| `getMaterialFolderIconCdnUrl` | `(path, options?: ResolveMaterialFolderIconOptions) => string \| null` |
+| `getFolderIcon` | `(path, options?: FolderIconOptions) => PathIcon \| null` |
 
 Folder options: `cdn`, `version`, `baseUrl`, `open`, and `fallback: "folder" | "none"` (default `"folder"`).
 
 ## Options
 
-`ResolveMaterialIconOptions`, accepted by the root path functions. The other option types are subsets of it.
+`IconOptions`, accepted by the root path functions. The other option types are subsets of it.
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `"file" \| "folder"` | `"file"` | Resolve `path` as a file or a folder. |
-| `open` | `boolean` | `false` | Folders only. Use the expanded variant: `filename` and `cdnUrl` get `-open` (`folder-src-open.svg`), `name` stays `folder-src`. |
+| `open` | `boolean` | `false` | Folders only. Use the expanded variant: `filename` and `url` get `-open` (`folder-src-open.svg`), `name` stays `folder-src`. |
 | `languageId` | `string` | — | Files only. VS Code language ID used when the path matches no filename or extension. A specific path match always wins. Ignored for folders. |
 | `fallback` | `"file" \| "folder" \| "none"` | same as `type` | What to return when nothing matches: the generic `file` icon, the generic `folder` icon, or `null`. |
-| `cdn` | `"jsdelivr" \| "unpkg"` | `"jsdelivr"` | CDN used to build `cdnUrl`. |
-| `version` | `string` | `metadata.upstreamVersion` (`"5.39.0"`) | `material-icon-theme` version in `cdnUrl`. See [Versioning](#versioning-and-icon-data) before changing it. |
-| `baseUrl` | `string` | — | Build `cdnUrl` as `<baseUrl>/<filename>` instead of using a CDN. Overrides `cdn` and `version`. |
+| `cdn` | `"jsdelivr" \| "unpkg"` | `"jsdelivr"` | CDN used to build `url`. |
+| `version` | `string` | `metadata.upstreamVersion` (`"5.39.0"`) | `material-icon-theme` version in `url`. See [Versioning](#versioning-and-icon-data) before changing it. |
+| `baseUrl` | `string` | — | Build `url` as `<baseUrl>/<filename>` instead of using a CDN. Overrides `cdn` and `version`. |
 
 Which option types accept what:
 
 | Type | Used by | Accepts |
 | --- | --- | --- |
-| `ResolveMaterialIconOptions` | `resolveMaterialIcon`, `getMaterialIconName`, `getMaterialIconCdnUrl` | all of the above |
-| `ResolveByLanguageIdOptions` | `resolveMaterialIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback` |
-| `ResolveMaterialFileIconOptions` | `resolveMaterialFileIcon`, `getMaterialFileIcon*` | `cdn`, `version`, `baseUrl`, `languageId`, `fallback: "file" \| "none"` |
-| `ResolveFileByLanguageIdOptions` | `resolveMaterialFileIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback: "file" \| "none"` |
-| `ResolveMaterialFolderIconOptions` | `resolveMaterialFolderIcon`, `getMaterialFolderIcon*` | `cdn`, `version`, `baseUrl`, `open`, `fallback: "folder" \| "none"` |
+| `IconOptions` | `getIcon` | all of the above |
+| `LanguageIdOptions` | `getIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback` |
+| `FileIconOptions` | `getFileIcon` | `cdn`, `version`, `baseUrl`, `languageId`, `fallback: "file" \| "none"` |
+| `FileLanguageIdOptions` | `getFileIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback: "file" \| "none"` |
+| `FolderIconOptions` | `getFolderIcon` | `cdn`, `version`, `baseUrl`, `open`, `fallback: "folder" \| "none"` |
 
 ## Types
 
 ```ts
-type ResolvedMaterialIcon = {
+type PathIcon = {
   /** Icon name, e.g. "typescript", "folder-src". No ".svg", no "-open". */
   name: string;
   /** SVG filename, e.g. "typescript.svg", "folder-src-open.svg". */
   filename: string;
   /** Full SVG URL, built from cdn + version, or from baseUrl. */
-  cdnUrl: string;
+  url: string;
   type: "file" | "folder";
   /** Which lookup table matched. */
-  source: ResolveSource;
+  source: IconSource;
 };
 
-type ResolveSource =
+type IconSource =
   | "fileNamesWithPath" // parent folder + basename, e.g. "src/bashly.yml"
   | "fileNames"         // exact basename, e.g. "package.json", "Dockerfile"
   | "fileExtensions"    // extension, e.g. ".ts", ".d.ts", ".test.ts"
@@ -457,7 +412,7 @@ type CdnProvider = "jsdelivr" | "unpkg";
 
 Every type above and every option type is exported from the root entry.
 
-> **Tip:** The return type is always `ResolvedMaterialIcon | null` because `fallback: "none"` can produce `null`. With the default fallback the result is never `null` at runtime, so a non-null assertion (`!`) or a small guard is safe.
+> **Tip:** The return type is always `PathIcon | null` because `fallback: "none"` can produce `null`. With the default fallback the result is never `null` at runtime, so a non-null assertion (`!`) or a small guard is safe.
 
 ## Resolution rules
 
@@ -479,7 +434,7 @@ The first match wins:
 | 1 | `fileNamesWithPath` | `<parent folder>/<basename>` | `src/bashly.yml` → `bashly` (plain `bashly.yml` → `yaml`) |
 | 2 | `fileNames` | full basename | `package.json` → `nodejs`, `.gitignore` → `git`, `Makefile` → `makefile` |
 | 3 | `fileExtensions` | extensions, longest first | `button.test.ts` tries `test.ts` → `test-ts` before `ts`; `lib.d.ts` → `typescript-def` |
-| 4 | `languageIds` | `options.languageId` | `resolveMaterialIcon("untitled", { languageId: "typescript" })` → `typescript` |
+| 4 | `languageIds` | `options.languageId` | `getIcon("untitled", { languageId: "typescript" })` → `typescript` |
 | 5 | fallback | — | `file` icon (`source: "default"`), or per `fallback` |
 
 Only the immediate parent folder is used in step 1.
@@ -502,7 +457,7 @@ Language IDs map to the icon VS Code shows for that language: `typescriptreact` 
 ## Versioning and icon data
 
 - **Pinned upstream.** Each release of this package is generated from one tagged release of `vscode-material-icon-theme`, currently **5.39.0**. You can check it at runtime with `metadata.upstreamVersion`.
-- **Why the CDN version is pinned too.** Upstream adds, renames, and occasionally removes icons. The bundled tables only know the icon names that exist in the pinned release, so `cdnUrl` uses the same version by default. CI checks every referenced icon against the published npm tarball, so every default URL points at an SVG that exists.
+- **Why the CDN version is pinned too.** Upstream adds, renames, and occasionally removes icons. The bundled tables only know the icon names that exist in the pinned release, so `url` uses the same version by default. CI checks every referenced icon against the published npm tarball, so every default URL points at an SVG that exists.
 - **Using `version: "latest"`.** Allowed, but you mix this package's associations with a newer icon set. If upstream renames an icon, the URL may 404. Prefer upgrading this package instead.
 - **Staying current.** New upstream releases are tracked, and this package is regenerated and released for them. Update `path-icon` to get new icons and associations.
 - **Package version ≠ upstream version.** `path-icon` follows its own semver. Use `metadata.upstreamVersion` to see which icon set you have.
@@ -529,7 +484,7 @@ No. Only the string is inspected. Pass anything: real paths, URLs, virtual paths
 Yes. There are no Node built-ins, no dependencies, and no I/O.
 
 **Can I get the SVG markup instead of a URL?**
-Not from this package. Fetch `cdnUrl`, or self-host the SVGs and import them with your bundler, using `name` / `filename` as the key.
+Not from this package. Fetch `url`, or self-host the SVGs and import them with your bundler, using `name` / `filename` as the key.
 
 **How do I try paths without installing?**
 Open the **[Playground](https://path-icon.vercel.app/playground)**: paste paths and see the resolved icons live.

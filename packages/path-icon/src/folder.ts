@@ -1,14 +1,10 @@
 import { defaultFolder, folderNames } from "./generated/folder-icons.ts";
 import { getBasename, normalizePath } from "./normalize.ts";
 import { type Hit, makeResult } from "./result.ts";
-import type {
-  FallbackMode,
-  ResolvedMaterialIcon,
-  ResolveMaterialIconOptions,
-} from "./types.ts";
+import type { FallbackMode, IconOptions, PathIcon } from "./types.ts";
 
-export type ResolveMaterialFolderIconOptions = Omit<
-  ResolveMaterialIconOptions,
+export type FolderIconOptions = Omit<
+  IconOptions,
   "fallback" | "languageId" | "type"
 > & {
   /**
@@ -43,10 +39,10 @@ function lookupFolder(path: string): Hit | null {
  * `path-icon/file` for file-only resolution, or the root entry
  * for the combined resolver.
  */
-export function resolveMaterialFolderIcon(
+export function getFolderIcon(
   path: string,
-  options?: ResolveMaterialFolderIconOptions,
-): ResolvedMaterialIcon | null {
+  options?: FolderIconOptions,
+): PathIcon | null {
   const opts = options ?? {};
   const open = opts.open ?? false;
   const hit = lookupFolder(path);
@@ -62,26 +58,4 @@ export function resolveMaterialFolderIcon(
     open,
     opts,
   );
-}
-
-/**
- * Convenience wrapper around {@link resolveMaterialFolderIcon} that returns
- * just the icon name.
- */
-export function getMaterialFolderIconName(
-  path: string,
-  options?: ResolveMaterialFolderIconOptions,
-): string | null {
-  return resolveMaterialFolderIcon(path, options)?.name ?? null;
-}
-
-/**
- * Convenience wrapper around {@link resolveMaterialFolderIcon} that returns
- * just the resolved CDN URL.
- */
-export function getMaterialFolderIconCdnUrl(
-  path: string,
-  options?: ResolveMaterialFolderIconOptions,
-): string | null {
-  return resolveMaterialFolderIcon(path, options)?.cdnUrl ?? null;
 }

@@ -12,7 +12,7 @@ Bun workspace monorepo:
 ## Repo Map
 
 - `src/index.ts` — public API re-exports
-- `src/resolve.ts` — `resolveMaterialIcon`, `getMaterialIconName`, `getMaterialIconCdnUrl`
+- `src/resolve.ts` — `getIcon`, `getIconByLanguageId`
 - `src/file.ts` — file-only resolver for `path-icon/file`; imports only file icon generated data
 - `src/folder.ts` — folder-only resolver for `path-icon/folder`; imports only folder icon generated data
 - `src/result.ts` — shared result / CDN URL construction
@@ -86,5 +86,5 @@ bun run format       # biome format --write
 
 - `package.json#exports` uses per-condition types (`import.types` → `.d.mts`, `require.types` → `.d.cts`) for proper dual-package type resolution. `typesVersions` is set so legacy `--moduleResolution node` consumers can resolve `./file` and `./folder` subpaths. If you change build entry names, output extensions, or declaration filenames, update `exports` and `typesVersions` to match. Validate with `bunx @arethetypeswrong/cli --pack .` (all entries should be 🟢 across node10/node16/bundler).
 - `tsdown.config.ts` has `minify: true` for size; debugging the bundle requires reading source instead.
-- Default `version` in `ResolveMaterialIconOptions` is pinned to `metadata.upstreamVersion`, not `latest`. Users opt into `latest` explicitly. Don't change this default — the generated association table only matches the pinned version's SVG inventory.
+- Default `version` in `IconOptions` is pinned to `metadata.upstreamVersion`, not `latest`. Users opt into `latest` explicitly. Don't change this default — the generated association table only matches the pinned version's SVG inventory.
 - The validator fetches the tarball from `registry.npmjs.org` directly (it does not call `npm pack`, which previously hit local cache permission issues).

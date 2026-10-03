@@ -1,5 +1,5 @@
 /**
- * CDN provider used to build {@link ResolvedMaterialIcon.cdnUrl}.
+ * CDN provider used to build {@link PathIcon.url}.
  *
  * - `"jsdelivr"` — `https://cdn.jsdelivr.net/npm/material-icon-theme@<version>/icons/<file>` (default)
  * - `"unpkg"` — `https://unpkg.com/material-icon-theme@<version>/icons/<file>`
@@ -32,7 +32,7 @@ export type FallbackMode = "file" | "folder" | "none";
  * - `"folderNames"` — matched a generic folder name.
  * - `"default"` — no match; the default file/folder icon was returned via `fallback`.
  */
-export type ResolveSource =
+export type IconSource =
   | "fileNamesWithPath"
   | "fileNames"
   | "fileExtensions"
@@ -42,10 +42,9 @@ export type ResolveSource =
   | "default";
 
 /**
- * Options for {@link resolveMaterialIcon}, {@link getMaterialIconName}, and
- * {@link getMaterialIconCdnUrl}.
+ * Options for {@link getIcon}.
  */
-export type ResolveMaterialIconOptions = {
+export type IconOptions = {
   /**
    * Resolve the input as a file or a folder.
    *
@@ -54,8 +53,8 @@ export type ResolveMaterialIconOptions = {
   type?: IconType;
 
   /**
-   * CDN provider used to build {@link ResolvedMaterialIcon.cdnUrl}.
-   * Ignored when {@link ResolveMaterialIconOptions.baseUrl} is set.
+   * CDN provider used to build {@link PathIcon.url}.
+   * Ignored when {@link IconOptions.baseUrl} is set.
    *
    * @default "jsdelivr"
    */
@@ -69,7 +68,7 @@ export type ResolveMaterialIconOptions = {
    * match that exact release's SVG inventory. Pass an explicit version (or
    * `"latest"`) to opt out.
    *
-   * Ignored when {@link ResolveMaterialIconOptions.baseUrl} is set.
+   * Ignored when {@link IconOptions.baseUrl} is set.
    *
    * @default metadata.upstreamVersion
    */
@@ -77,7 +76,7 @@ export type ResolveMaterialIconOptions = {
 
   /**
    * What to return when no icon matches the input. Defaults to a default icon
-   * matching {@link ResolveMaterialIconOptions.type} — i.e. `"file"` for files
+   * matching {@link IconOptions.type} — i.e. `"file"` for files
    * and `"folder"` for folders. Set to `"none"` to get `null` instead.
    *
    * @default Matches `type`
@@ -93,7 +92,7 @@ export type ResolveMaterialIconOptions = {
   open?: boolean;
 
   /**
-   * Use this base URL for {@link ResolvedMaterialIcon.cdnUrl} instead of a CDN.
+   * Use this base URL for {@link PathIcon.url} instead of a CDN.
    * The filename is appended to it (a single trailing slash is normalized).
    *
    * Useful when self-hosting the icon SVGs. When set, both `cdn` and `version`
@@ -101,8 +100,8 @@ export type ResolveMaterialIconOptions = {
    *
    * @example
    * ```ts
-   * resolveMaterialIcon("src/index.ts", { baseUrl: "/icons" });
-   * // cdnUrl: "/icons/typescript.svg"
+   * getIcon("src/index.ts", { baseUrl: "/icons" });
+   * // url: "/icons/typescript.svg"
    * ```
    */
   baseUrl?: string;
@@ -119,22 +118,22 @@ export type ResolveMaterialIconOptions = {
 };
 
 /**
- * Options for {@link resolveMaterialIconByLanguageId}.
+ * Options for {@link getIconByLanguageId}.
  *
- * Same as {@link ResolveMaterialIconOptions} minus the path-specific fields
+ * Same as {@link IconOptions} minus the path-specific fields
  * (`type`, `open`, `languageId`), which don't apply when resolving directly
  * from a language id.
  */
-export type ResolveByLanguageIdOptions = Omit<
-  ResolveMaterialIconOptions,
+export type LanguageIdOptions = Omit<
+  IconOptions,
   "type" | "open" | "languageId"
 >;
 
 /**
- * The result returned by {@link resolveMaterialIcon} and
- * {@link resolveMaterialIconByLanguageId}.
+ * The result returned by {@link getIcon} and
+ * {@link getIconByLanguageId}.
  */
-export type ResolvedMaterialIcon = {
+export type PathIcon = {
   /**
    * Icon name as defined by the Material Icon Theme (e.g. `"typescript"`,
    * `"folder-src"`). Does not include the `.svg` extension or the `-open`
@@ -152,7 +151,7 @@ export type ResolvedMaterialIcon = {
    * Full URL to the SVG. Built from `cdn` + `version`, or from `baseUrl`
    * when one is provided in the options.
    */
-  cdnUrl: string;
+  url: string;
 
   /**
    * Whether this icon represents a file or a folder.
@@ -160,7 +159,7 @@ export type ResolvedMaterialIcon = {
   type: IconType;
 
   /**
-   * Which lookup table produced this match. See {@link ResolveSource}.
+   * Which lookup table produced this match. See {@link IconSource}.
    */
-  source: ResolveSource;
+  source: IconSource;
 };

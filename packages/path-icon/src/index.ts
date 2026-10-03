@@ -1,37 +1,20 @@
 export {
-  buildBaseUrl,
   buildCdnUrl,
+  joinBaseUrl,
   MATERIAL_ICON_THEME_PACKAGE,
 } from "./cdn.ts";
-export type {
-  ResolveFileByLanguageIdOptions,
-  ResolveMaterialFileIconOptions,
-} from "./file.ts";
-export {
-  getMaterialFileIconCdnUrl,
-  getMaterialFileIconName,
-  resolveMaterialFileIcon,
-  resolveMaterialFileIconByLanguageId,
-} from "./file.ts";
-export type { ResolveMaterialFolderIconOptions } from "./folder.ts";
-export {
-  getMaterialFolderIconCdnUrl,
-  getMaterialFolderIconName,
-  resolveMaterialFolderIcon,
-} from "./folder.ts";
+export type { FileIconOptions, FileLanguageIdOptions } from "./file.ts";
+export { getFileIcon, getFileIconByLanguageId } from "./file.ts";
+export type { FolderIconOptions } from "./folder.ts";
+export { getFolderIcon } from "./folder.ts";
 export { metadata } from "./generated/metadata.ts";
-export {
-  getMaterialIconCdnUrl,
-  getMaterialIconName,
-  resolveMaterialIcon,
-  resolveMaterialIconByLanguageId,
-} from "./resolve.ts";
+export { getIcon, getIconByLanguageId } from "./resolve.ts";
 export type {
   CdnProvider,
   FallbackMode,
+  IconOptions,
+  IconSource,
   IconType,
-  ResolveByLanguageIdOptions,
-  ResolvedMaterialIcon,
-  ResolveMaterialIconOptions,
-  ResolveSource,
+  LanguageIdOptions,
+  PathIcon,
 } from "./types.ts";

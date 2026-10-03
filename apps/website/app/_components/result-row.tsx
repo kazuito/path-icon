@@ -9,7 +9,7 @@ import {
   MoreHorizontal,
   Type,
 } from "lucide-react";
-import type { IconType, ResolvedMaterialIcon, ResolveSource } from "path-icon";
+import type { IconType, PathIcon, IconSource } from "path-icon";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 export type ResolvedItem = {
   raw: string;
   type: IconType;
-  result: ResolvedMaterialIcon | null;
+  result: PathIcon | null;
 };
 
 type Props = {
@@ -48,7 +48,7 @@ export function ResultRow({ item, open }: Props) {
         {item.result && (
           // biome-ignore lint/performance/noImgElement: external CDN, no Next optimizer needed
           <img
-            src={item.result.cdnUrl}
+            src={item.result.url}
             alt={item.result.name}
             loading="lazy"
             className="size-5"
@@ -102,14 +102,14 @@ export function ResultRow({ item, open }: Props) {
   );
 }
 
-function RowActions({ result }: { result: ResolvedMaterialIcon }) {
+function RowActions({ result }: { result: PathIcon }) {
   const copy = (text: string) => {
     void navigator.clipboard.writeText(text).catch(() => {});
   };
 
   const copySvg = async () => {
     try {
-      const res = await fetch(result.cdnUrl);
+      const res = await fetch(result.url);
       if (!res.ok) return;
       const text = await res.text();
       await navigator.clipboard.writeText(text);
@@ -120,7 +120,7 @@ function RowActions({ result }: { result: ResolvedMaterialIcon }) {
 
   const downloadSvg = async () => {
     try {
-      const res = await fetch(result.cdnUrl);
+      const res = await fetch(result.url);
       if (!res.ok) return;
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -148,18 +148,14 @@ function RowActions({ result }: { result: ResolvedMaterialIcon }) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           render={
-            <Link
-              href={result.cdnUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-            />
+            <Link href={result.url} target="_blank" rel="noreferrer noopener" />
           }
         >
           <ExternalLink />
           Open CDN URL
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => copy(result.cdnUrl)}>
+        <DropdownMenuItem onClick={() => copy(result.url)}>
           <LinkIcon />
           Copy CDN URL
         </DropdownMenuItem>
@@ -185,7 +181,7 @@ function RowActions({ result }: { result: ResolvedMaterialIcon }) {
   );
 }
 
-function SourceBadge({ source }: { source: ResolveSource | null }) {
+function SourceBadge({ source }: { source: IconSource | null }) {
   if (source === null) {
     return (
       <Badge

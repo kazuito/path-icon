@@ -1,4 +1,4 @@
-import { resolveMaterialIcon } from "path-icon";
+import { getIcon } from "path-icon";
 import { cn } from "@/lib/utils";
 import { Code } from "./code";
 
@@ -30,11 +30,11 @@ const TREE: { path: string; folder?: boolean; open?: boolean }[] = [
 
 const TABS = [ACTIVE_FILE, "src/index.ts", "package.json", "vite.config.ts"];
 
-const SOURCE = `import { resolveMaterialIcon } from "path-icon";
+const SOURCE = `import { getIcon } from "path-icon";
 
 export function FileIcon({ path }: { path: string }) {
-  const { cdnUrl, name } = resolveMaterialIcon(path);
-  return <img src={cdnUrl} alt={name} width={16} height={16} />;
+  const { url, name } = getIcon(path);
+  return <img src={url} alt={name} width={16} height={16} />;
 }`;
 
 const basename = (path: string) => path.slice(path.lastIndexOf("/") + 1);
@@ -48,14 +48,14 @@ function Icon({
   folder?: boolean;
   open?: boolean;
 }) {
-  const icon = resolveMaterialIcon(path, {
+  const icon = getIcon(path, {
     type: folder ? "folder" : "file",
     open,
   });
   if (!icon) return null;
   return (
     // biome-ignore lint/performance/noImgElement: external CDN, no Next optimizer needed
-    <img src={icon.cdnUrl} alt="" loading="lazy" className="size-4 shrink-0" />
+    <img src={icon.url} alt="" loading="lazy" className="size-4 shrink-0" />
   );
 }
 

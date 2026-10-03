@@ -14,13 +14,13 @@ import {
 import { type Hit, makeResult } from "./result.ts";
 import type {
   FallbackMode,
-  ResolveByLanguageIdOptions,
-  ResolvedMaterialIcon,
-  ResolveMaterialIconOptions,
+  IconOptions,
+  LanguageIdOptions,
+  PathIcon,
 } from "./types.ts";
 
-export type ResolveMaterialFileIconOptions = Omit<
-  ResolveMaterialIconOptions,
+export type FileIconOptions = Omit<
+  IconOptions,
   "fallback" | "open" | "type"
 > & {
   /**
@@ -34,10 +34,7 @@ export type ResolveMaterialFileIconOptions = Omit<
   fallback?: Extract<FallbackMode, "file" | "none">;
 };
 
-export type ResolveFileByLanguageIdOptions = Omit<
-  ResolveByLanguageIdOptions,
-  "fallback"
-> & {
+export type FileLanguageIdOptions = Omit<LanguageIdOptions, "fallback"> & {
   /**
    * What to return when no language id matches the input.
    *
@@ -80,10 +77,10 @@ function lookupLanguageId(languageId: string): Hit | null {
  * `path-icon/folder` for folder-only resolution, or the root
  * entry for the combined resolver.
  */
-export function resolveMaterialFileIcon(
+export function getFileIcon(
   path: string,
-  options?: ResolveMaterialFileIconOptions,
-): ResolvedMaterialIcon | null {
+  options?: FileIconOptions,
+): PathIcon | null {
   const opts = options ?? {};
   let hit = lookupFile(path);
 
@@ -107,10 +104,10 @@ export function resolveMaterialFileIcon(
 /**
  * Resolve a Material Icon Theme file icon directly from a VS Code language id.
  */
-export function resolveMaterialFileIconByLanguageId(
+export function getFileIconByLanguageId(
   languageId: string,
-  options?: ResolveFileByLanguageIdOptions,
-): ResolvedMaterialIcon | null {
+  options?: FileLanguageIdOptions,
+): PathIcon | null {
   const opts = options ?? {};
   const hit = lookupLanguageId(languageId);
 
@@ -125,26 +122,4 @@ export function resolveMaterialFileIconByLanguageId(
     false,
     opts,
   );
-}
-
-/**
- * Convenience wrapper around {@link resolveMaterialFileIcon} that returns just
- * the icon name.
- */
-export function getMaterialFileIconName(
-  path: string,
-  options?: ResolveMaterialFileIconOptions,
-): string | null {
-  return resolveMaterialFileIcon(path, options)?.name ?? null;
-}
-
-/**
- * Convenience wrapper around {@link resolveMaterialFileIcon} that returns just
- * the resolved CDN URL.
- */
-export function getMaterialFileIconCdnUrl(
-  path: string,
-  options?: ResolveMaterialFileIconOptions,
-): string | null {
-  return resolveMaterialFileIcon(path, options)?.cdnUrl ?? null;
 }
