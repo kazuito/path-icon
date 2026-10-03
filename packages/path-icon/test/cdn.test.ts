@@ -4,7 +4,7 @@ import { buildCdnUrl, getIcon, joinBaseUrl } from "../src/index.ts";
 describe("CDN URL", () => {
   it("builds jsDelivr URL by default", () => {
     const r = getIcon("src/app/page.tsx", {
-      type: "file",
+      isFolder: false,
       version: "5.34.0",
     });
     expect(r?.url).toBe(
@@ -14,7 +14,7 @@ describe("CDN URL", () => {
 
   it("builds unpkg URL", () => {
     const r = getIcon("src/app/page.tsx", {
-      type: "file",
+      isFolder: false,
       cdn: "unpkg",
       version: "5.34.0",
     });
@@ -24,13 +24,13 @@ describe("CDN URL", () => {
   });
 
   it("uses metadata.upstreamVersion by default", () => {
-    const r = getIcon("page.tsx", { type: "file" });
+    const r = getIcon("page.tsx", { isFolder: false });
     expect(r?.url).toMatch(/material-icon-theme@\d+\.\d+\.\d+\//);
   });
 
   it("respects baseUrl when provided", () => {
     const r = getIcon("src/app/page.tsx", {
-      type: "file",
+      isFolder: false,
       baseUrl: "/material-icons",
     });
     expect(r?.url).toBe("/material-icons/react_ts.svg");
@@ -38,7 +38,7 @@ describe("CDN URL", () => {
 
   it("normalizes trailing slash on baseUrl", () => {
     const r = getIcon("src/app/page.tsx", {
-      type: "file",
+      isFolder: false,
       baseUrl: "/material-icons/",
     });
     expect(r?.url).toBe("/material-icons/react_ts.svg");
@@ -59,7 +59,7 @@ describe("CDN URL", () => {
 
   it("folder open uses -open filename in cdn url", () => {
     const r = getIcon("src", {
-      type: "folder",
+      isFolder: true,
       open: true,
       version: "5.34.0",
     });

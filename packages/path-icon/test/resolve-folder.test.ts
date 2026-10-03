@@ -3,7 +3,7 @@ import { getIcon } from "../src/index.ts";
 
 describe("getIcon (folder)", () => {
   it("matches plain folder name", () => {
-    const r = getIcon("src", { type: "folder" });
+    const r = getIcon("src", { isFolder: true });
     expect(r?.name).toBe("folder-src");
     expect(r?.source).toBe("folderNames");
     expect(r?.filename).toBe("folder-src.svg");
@@ -11,27 +11,27 @@ describe("getIcon (folder)", () => {
 
   it("matches expanded folder-name variants", () => {
     for (const p of [".src", "_src", "-src", "__src__"]) {
-      const r = getIcon(p, { type: "folder" });
+      const r = getIcon(p, { isFolder: true });
       expect(r?.name, `for ${p}`).toBe("folder-src");
     }
   });
 
   it("uses -open suffix when open=true", () => {
-    const r = getIcon("src", { type: "folder", open: true });
+    const r = getIcon("src", { isFolder: true, open: true });
     expect(r?.name).toBe("folder-src");
     expect(r?.filename).toBe("folder-src-open.svg");
   });
 
   it("matches node_modules", () => {
     const r = getIcon("packages/node_modules", {
-      type: "folder",
+      isFolder: true,
     });
     expect(r?.name).toBe("folder-node");
   });
 
   it("falls back to default folder for unknown", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
     });
     expect(r?.source).toBe("default");
     expect(r?.name).toBe("folder");
@@ -39,7 +39,7 @@ describe("getIcon (folder)", () => {
 
   it("default folder open uses -open filename", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
       open: true,
     });
     expect(r?.filename).toBe("folder-open.svg");
@@ -47,30 +47,30 @@ describe("getIcon (folder)", () => {
 
   it("returns null with fallback=none for unknown folder", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
       fallback: "none",
     });
     expect(r).toBeNull();
   });
 
   it("ignores trailing slash", () => {
-    const r = getIcon("src/", { type: "folder" });
+    const r = getIcon("src/", { isFolder: true });
     expect(r?.name).toBe("folder-src");
   });
 
   it("normalizes Windows separators in folder paths", () => {
-    const r = getIcon("project\\src", { type: "folder" });
+    const r = getIcon("project\\src", { isFolder: true });
     expect(r?.name).toBe("folder-src");
   });
 
   it("matches folder name case-insensitively", () => {
-    const r = getIcon("SRC", { type: "folder" });
+    const r = getIcon("SRC", { isFolder: true });
     expect(r?.name).toBe("folder-src");
   });
 
   it("returns folder type and source on a miss with default fallback", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
     });
     expect(r?.type).toBe("folder");
     expect(r?.source).toBe("default");
@@ -78,7 +78,7 @@ describe("getIcon (folder)", () => {
 
   it("fallback='file' on a missed folder returns file default", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
       fallback: "file",
     });
     expect(r?.type).toBe("file");
@@ -88,7 +88,7 @@ describe("getIcon (folder)", () => {
 
   it("languageId option does not affect folder resolution", () => {
     const r = getIcon("totally-unknown-folder-xyz", {
-      type: "folder",
+      isFolder: true,
       languageId: "rust",
       fallback: "none",
     });
@@ -96,14 +96,14 @@ describe("getIcon (folder)", () => {
   });
 
   it("returns empty string folder as default", () => {
-    const r = getIcon("", { type: "folder" });
+    const r = getIcon("", { isFolder: true });
     expect(r?.source).toBe("default");
     expect(r?.name).toBe("folder");
   });
 
   it("returns empty filename as null with fallback=none", () => {
     const r = getIcon("", {
-      type: "folder",
+      isFolder: true,
       fallback: "none",
     });
     expect(r).toBeNull();

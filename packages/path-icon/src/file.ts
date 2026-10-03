@@ -21,7 +21,7 @@ import type {
 
 export type FileIconOptions = Omit<
   IconOptions,
-  "fallback" | "open" | "type"
+  "fallback" | "open" | "isFolder"
 > & {
   /**
    * What to return when no file icon matches the input.
@@ -34,14 +34,7 @@ export type FileIconOptions = Omit<
   fallback?: Extract<FallbackMode, "file" | "none">;
 };
 
-export type FileLanguageIdOptions = Omit<LanguageIdOptions, "fallback"> & {
-  /**
-   * What to return when no language id matches the input.
-   *
-   * @default "file"
-   */
-  fallback?: Extract<FallbackMode, "file" | "none">;
-};
+export type FileLanguageIdOptions = LanguageIdOptions;
 
 function lookupFile(path: string): Hit | null {
   const normalized = normalizePath(path);
@@ -79,6 +72,14 @@ function lookupLanguageId(languageId: string): Hit | null {
  */
 export function getFileIcon(
   path: string,
+  options?: FileIconOptions & { fallback?: "file" },
+): PathIcon;
+export function getFileIcon(
+  path: string,
+  options?: FileIconOptions,
+): PathIcon | null;
+export function getFileIcon(
+  path: string,
   options?: FileIconOptions,
 ): PathIcon | null {
   const opts = options ?? {};
@@ -104,6 +105,14 @@ export function getFileIcon(
 /**
  * Resolve a Material Icon Theme file icon directly from a VS Code language id.
  */
+export function getFileIconByLanguageId(
+  languageId: string,
+  options?: FileLanguageIdOptions & { fallback?: "file" },
+): PathIcon;
+export function getFileIconByLanguageId(
+  languageId: string,
+  options?: FileLanguageIdOptions,
+): PathIcon | null;
 export function getFileIconByLanguageId(
   languageId: string,
   options?: FileLanguageIdOptions,

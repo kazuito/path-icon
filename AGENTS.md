@@ -73,7 +73,7 @@ bun run format       # biome format --write
 ## Codebase Rules
 
 - File resolver order: `fileNamesWithPath[parent/basename]` → `fileNames[basename]` → `fileExtensions[longest…shortest]` → fallback. All keys lowercase.
-- Folder resolver order: `rootFolderNames[basename]` → `folderNames[basename]` → fallback. Keys are pre-expanded with the upstream `extendFolderNames` rule (`name`, `.name`, `_name`, `-name`, `__name__`).
+- Folder resolver order: `folderNames[basename]` → fallback (`rootFolderNames` is reserved; upstream defines none). Keys are pre-expanded with the upstream `extendFolderNames` rule (`name`, `.name`, `_name`, `-name`, `__name__`).
 - The `-open` suffix for expanded folders is appended only at filename construction in `src/result.ts#makeResult`; map values store the bare icon name.
 - Keep file-only and folder-only entry points independent: `src/file.ts` must not import `src/generated/folder-icons.ts`, and `src/folder.ts` must not import `src/generated/file-icons.ts`.
 - Generated tables are packed as `name|keys` groups joined by `;`, where `keys` is a brace-expansion trie (`webpack.{base.{cjs,js},cjs}`), an empty key means the key equals `name`, and folder icons drop the `folder-` prefix. Keys or icons containing `; | , { }`, and folder icons without the `folder-` prefix, fail `bun run generate`. Lookup tables are `Object.create(null)`, so keys like `constructor` / `__proto__` behave as ordinary keys.

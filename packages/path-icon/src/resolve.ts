@@ -1,20 +1,21 @@
 import { getFileIcon, getFileIconByLanguageId } from "./file.ts";
 import { getFolderIcon } from "./folder.ts";
-import type { IconOptions, LanguageIdOptions, PathIcon } from "./types.ts";
+import type { FallbackMode, IconOptions, PathIcon } from "./types.ts";
 
 /**
  * Resolve a Material Icon Theme icon from a file or folder path.
  *
  * Returns the matching {@link PathIcon}, or `null` only when
  * `options.fallback` is `"none"` and nothing matched. With the default
- * `fallback`, a default file or folder icon is always returned.
+ * `fallback`, a default file or folder icon is always returned, and the
+ * return type is narrowed to `PathIcon`.
  *
  * Resolution order (case-insensitive):
  *
  * - **Files** — `parent/basename` exact → `basename` exact → longest known
  *   extension → {@link IconOptions.languageId} (when provided)
  *   → fallback.
- * - **Folders** — root folder name → generic folder name → fallback. The
+ * - **Folders** — folder name → fallback. The
  *   `-open` suffix is appended to the SVG filename when
  *   {@link IconOptions.open} is `true`.
  *
@@ -32,7 +33,7 @@ import type { IconOptions, LanguageIdOptions, PathIcon } from "./types.ts";
  * //   source: "fileExtensions",
  * // }
  *
- * getIcon("src", { type: "folder", open: true });
+ * getIcon("src", { isFolder: true, open: true });
  * // { name: "folder-src", filename: "folder-src-open.svg", ... }
  *
  * getIcon("scratch.unknown-ext", { languageId: "rust" });
@@ -42,9 +43,14 @@ import type { IconOptions, LanguageIdOptions, PathIcon } from "./types.ts";
  * // null
  * ```
  */
+export function getIcon(
+  path: string,
+  options?: IconOptions & { fallback?: Exclude<FallbackMode, "none"> },
+): PathIcon;
+export function getIcon(path: string, options?: IconOptions): PathIcon | null;
 export function getIcon(path: string, options?: IconOptions): PathIcon | null {
   const opts = options ?? {};
-  const type = opts.type ?? "file";
+  const type = opts.isFolder ? "folder" : "file";
   const open = opts.open ?? false;
 
   const hit =
@@ -79,7 +85,7 @@ export function getIcon(path: string, options?: IconOptions): PathIcon | null {
  * icon. With the default `fallback`, the default file icon is returned.
  *
  * @param languageId - VS Code language id (e.g. `"typescript"`, `"rust"`, `"shellscript"`). Matched case-insensitively.
- * @param options - See {@link LanguageIdOptions}.
+ * @param options - See `LanguageIdOptions`.
  *
  * @example
  * ```ts
@@ -90,23 +96,4 @@ export function getIcon(path: string, options?: IconOptions): PathIcon | null {
  * // null
  * ```
  */
-export function getIconByLanguageId(
-  languageId: string,
-  options?: LanguageIdOptions,
-): PathIcon | null {
-  const opts = options ?? {};
-  const hit = getFileIconByLanguageId(languageId, {
-    ...opts,
-    fallback: "none",
-  });
-  if (hit) return hit;
-
-  const fallback = opts.fallback ?? "file";
-  if (fallback === "none") return null;
-
-  if (fallback === "folder") {
-    return getFolderIcon("", { ...opts, fallback: "folder" });
-  }
-
-  return getFileIconByLanguageId("", { ...opts, fallback: "file" });
-}
+export const getIconByLanguageId = getFileIconByLanguageId;

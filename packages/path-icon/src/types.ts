@@ -7,7 +7,7 @@
 export type CdnProvider = "jsdelivr" | "unpkg";
 
 /**
- * Whether a path should be resolved as a file or a folder.
+ * Whether a resolved icon is a file icon or a folder icon.
  */
 export type IconType = "file" | "folder";
 
@@ -28,7 +28,7 @@ export type FallbackMode = "file" | "folder" | "none";
  * - `"fileNames"` — matched a full filename (e.g. `package.json`).
  * - `"fileExtensions"` — matched the longest known extension (e.g. `.ts`, `.d.ts`).
  * - `"languageIds"` — matched a VS Code language id (e.g. `"rust"`).
- * - `"rootFolderNames"` — matched a top-level folder name.
+ * - `"rootFolderNames"` — reserved; not produced by the current tables.
  * - `"folderNames"` — matched a generic folder name.
  * - `"default"` — no match; the default file/folder icon was returned via `fallback`.
  */
@@ -46,11 +46,11 @@ export type IconSource =
  */
 export type IconOptions = {
   /**
-   * Resolve the input as a file or a folder.
+   * Resolve the input as a folder instead of a file.
    *
-   * @default "file"
+   * @default false
    */
-  type?: IconType;
+  isFolder?: boolean;
 
   /**
    * CDN provider used to build {@link PathIcon.url}.
@@ -76,16 +76,16 @@ export type IconOptions = {
 
   /**
    * What to return when no icon matches the input. Defaults to a default icon
-   * matching {@link IconOptions.type} — i.e. `"file"` for files
+   * matching {@link IconOptions.isFolder} — i.e. `"file"` for files
    * and `"folder"` for folders. Set to `"none"` to get `null` instead.
    *
-   * @default Matches `type`
+   * @default Matches `isFolder`
    */
   fallback?: FallbackMode;
 
   /**
    * For folders, append `-open` to the SVG filename to get the expanded variant
-   * (e.g. `folder-src-open.svg`). Has no effect when `type` is `"file"`.
+   * (e.g. `folder-src-open.svg`). Has no effect unless `isFolder` is `true`.
    *
    * @default false
    */
@@ -112,7 +112,7 @@ export type IconOptions = {
    * the path itself doesn't match any specific filename or extension.
    *
    * Specific filename / path matches still win over the language id. Ignored
-   * when `type` is `"folder"`.
+   * when `isFolder` is `true`.
    */
   languageId?: string;
 };
@@ -121,13 +121,20 @@ export type IconOptions = {
  * Options for {@link getIconByLanguageId}.
  *
  * Same as {@link IconOptions} minus the path-specific fields
- * (`type`, `open`, `languageId`), which don't apply when resolving directly
- * from a language id.
+ * (`isFolder`, `open`, `languageId`), which don't apply when resolving
+ * directly from a language id.
  */
 export type LanguageIdOptions = Omit<
   IconOptions,
-  "type" | "open" | "languageId"
->;
+  "isFolder" | "open" | "languageId" | "fallback"
+> & {
+  /**
+   * What to return when no language id matches the input.
+   *
+   * @default "file"
+   */
+  fallback?: Extract<FallbackMode, "file" | "none">;
+};
 
 /**
  * The result returned by {@link getIcon} and

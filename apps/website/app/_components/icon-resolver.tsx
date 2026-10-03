@@ -44,7 +44,7 @@ export function IconResolver() {
         return { raw, type, result: null };
       }
       const opts: IconOptions = {
-        type,
+        isFolder,
         cdn,
         fallback: fb,
         open,

@@ -5,7 +5,7 @@ import type { FallbackMode, IconOptions, PathIcon } from "./types.ts";
 
 export type FolderIconOptions = Omit<
   IconOptions,
-  "fallback" | "languageId" | "type"
+  "fallback" | "languageId" | "isFolder"
 > & {
   /**
    * What to return when no folder icon matches the input.
@@ -39,6 +39,14 @@ function lookupFolder(path: string): Hit | null {
  * `path-icon/file` for file-only resolution, or the root entry
  * for the combined resolver.
  */
+export function getFolderIcon(
+  path: string,
+  options?: FolderIconOptions & { fallback?: "folder" },
+): PathIcon;
+export function getFolderIcon(
+  path: string,
+  options?: FolderIconOptions,
+): PathIcon | null;
 export function getFolderIcon(
   path: string,
   options?: FolderIconOptions,

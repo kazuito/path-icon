@@ -4,38 +4,38 @@ import { getIcon, getIconByLanguageId } from "../src/index.ts";
 
 describe("getIcon (file)", () => {
   it("matches exact filename (package.json → nodejs)", () => {
-    const r = getIcon("package.json", { type: "file" });
+    const r = getIcon("package.json", { isFolder: false });
     expect(r?.name).toBe("nodejs");
     expect(r?.source).toBe("fileNames");
     expect(r?.filename).toBe("nodejs.svg");
   });
 
   it("matches simple extension (.tsx → react_ts)", () => {
-    const r = getIcon("src/app/page.tsx", { type: "file" });
+    const r = getIcon("src/app/page.tsx", { isFolder: false });
     expect(r?.name).toBe("react_ts");
     expect(r?.source).toBe("fileExtensions");
   });
 
   it("prefers compound extension over simple (lib.d.ts)", () => {
-    const r = getIcon("lib.d.ts", { type: "file" });
+    const r = getIcon("lib.d.ts", { isFolder: false });
     expect(r?.source).toBe("fileExtensions");
     // upstream registers d.ts → typescript-def; bare ts → typescript
     expect(r?.name).not.toBe("typescript");
   });
 
   it("matches fileNamesWithPath when parent path matches (.github/FUNDING.yml)", () => {
-    const r = getIcon(".github/FUNDING.yml", { type: "file" });
+    const r = getIcon(".github/FUNDING.yml", { isFolder: false });
     expect(r?.source).toBe("fileNamesWithPath");
   });
 
   it("normalizes Windows separators and lowercase", () => {
-    const r = getIcon("src\\app\\Page.TSX", { type: "file" });
+    const r = getIcon("src\\app\\Page.TSX", { isFolder: false });
     expect(r?.name).toBe("react_ts");
   });
 
   it("falls back to default file icon for truly unknown name", () => {
     const r = getIcon("totally-unknown-binary-blob-xyz", {
-      type: "file",
+      isFolder: false,
     });
     expect(r?.source).toBe("default");
     expect(r?.name).toBe("file");
@@ -43,7 +43,7 @@ describe("getIcon (file)", () => {
 
   it("returns null when fallback=none and unmatched", () => {
     const r = getIcon("totally-unknown-binary-blob-xyz", {
-      type: "file",
+      isFolder: false,
       fallback: "none",
     });
     expect(r).toBeNull();
@@ -90,9 +90,9 @@ describe("getIcon (file)", () => {
     expect(r?.source).toBe("fileNames");
   });
 
-  it("languageId option is ignored for folder type", () => {
+  it("languageId option is ignored when isFolder is true", () => {
     const r = getIcon("foo.unknown-ext", {
-      type: "folder",
+      isFolder: true,
       languageId: "rust",
       fallback: "none",
     });
@@ -163,7 +163,7 @@ describe("getIcon (file)", () => {
 
   it("fallback='folder' on a missed file returns folder default", () => {
     const r = getIcon("zzz_no_such_file_xyz", {
-      type: "file",
+      isFolder: false,
       fallback: "folder",
     });
     expect(r?.type).toBe("folder");
@@ -182,7 +182,7 @@ describe("getIcon (file)", () => {
   it("treats path with no extension correctly", () => {
     // LICENSE has no extension and no upstream entry by default → fallback
     const r = getIcon("README", {
-      type: "file",
+      isFolder: false,
       fallback: "none",
     });
     // readme is a fileName in upstream, so this would resolve. Use a safer
@@ -190,7 +190,7 @@ describe("getIcon (file)", () => {
     // Switching to a guaranteed unknown:
     void r;
     const r2 = getIcon("zzz_no_such_file_name", {
-      type: "file",
+      isFolder: false,
       fallback: "none",
     });
     expect(r2).toBeNull();
@@ -252,15 +252,6 @@ describe("getIconByLanguageId", () => {
       baseUrl: "/assets/icons/",
     });
     expect(r?.url).toBe("/assets/icons/rust.svg");
-  });
-
-  it("fallback='folder' returns folder default on miss", () => {
-    const r = getIconByLanguageId("no-such-language-id-xyz", {
-      fallback: "folder",
-    });
-    expect(r?.type).toBe("folder");
-    expect(r?.name).toBe("folder");
-    expect(r?.source).toBe("default");
   });
 
   it("returns empty-string id as a miss", () => {

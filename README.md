@@ -10,7 +10,7 @@ Find the [Material Icon Theme](https://github.com/material-extensions/vscode-mat
 ```ts
 import { getIcon } from "path-icon";
 
-getIcon("src/index.ts")?.url;
+getIcon("src/index.ts").url;
 // "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
 ```
 
@@ -86,13 +86,13 @@ getIcon("src/index.ts");
 
 ### Resolve a folder
 
-Pass `type: "folder"`. Pass `open: true` for the expanded variant.
+Pass `isFolder: true`. Pass `open: true` for the expanded variant.
 
 ```ts
-getIcon("src", { type: "folder" });
+getIcon("src", { isFolder: true });
 // { name: "folder-src", filename: "folder-src.svg", type: "folder", source: "folderNames", ... }
 
-getIcon("src", { type: "folder", open: true });
+getIcon("src", { isFolder: true, open: true });
 // { name: "folder-src", filename: "folder-src-open.svg", ... }
 ```
 
@@ -145,10 +145,7 @@ function FileIcon({ path, isDir = false, isOpen = false }: {
   isDir?: boolean;
   isOpen?: boolean;
 }) {
-  const icon = getIcon(path, {
-    type: isDir ? "folder" : "file",
-    open: isOpen,
-  })!; // never null with the default fallback
+  const icon = getIcon(path, { isFolder: isDir, open: isOpen });
   return <img src={icon.url} alt="" width={16} height={16} />;
 }
 ```
@@ -161,7 +158,7 @@ type Node = { name: string; path: string; children?: Node[] };
 function Tree({ node, expanded }: { node: Node; expanded: Set<string> }) {
   const isDir = node.children !== undefined;
   const isOpen = expanded.has(node.path);
-  const icon = getIcon(node.path, { type: isDir ? "folder" : "file", open: isOpen })!;
+  const icon = getIcon(node.path, { isFolder: isDir, open: isOpen });
 
   return (
     <li>
@@ -203,7 +200,7 @@ Use `fallback: "none"` to get `null` instead of the generic icon, or check `sour
 
 ```ts
 getIcon("data.xyz", { fallback: "none" }); // null
-getIcon("data.xyz")?.source;                // "default"
+getIcon("data.xyz").source;                 // "default"
 ```
 
 ### Self-hosting the SVGs
@@ -216,10 +213,10 @@ cp -r node_modules/material-icon-theme/icons public/icons
 ```
 
 ```ts
-getIcon("main.rs", { baseUrl: "/icons" })?.url;
+getIcon("main.rs", { baseUrl: "/icons" }).url;
 // "/icons/rust.svg"
 
-getIcon("main.rs", { baseUrl: "https://assets.example.com/icons/" })?.url;
+getIcon("main.rs", { baseUrl: "https://assets.example.com/icons/" }).url;
 // "https://assets.example.com/icons/rust.svg"
 ```
 
@@ -257,36 +254,32 @@ All functions are synchronous and pure. The `path` argument accepts POSIX (`a/b`
 #### `getIcon(path, options?)`
 
 ```ts
-function getIcon(
-  path: string,
-  options?: IconOptions,
-): PathIcon | null;
+function getIcon(path: string, options?: IconOptions): PathIcon;
+// PathIcon | null when `fallback` may be "none"
 ```
 
-Resolve a file or folder path. `options.type` picks the mode (`"file"` by default). Returns `null` only when `fallback: "none"` and nothing matched.
+Resolve a file or folder path. Pass `isFolder: true` for folders (files by default). Returns `null` only when `fallback: "none"` and nothing matched.
 
 ```ts
-getIcon("Dockerfile")?.name;                           // "docker"
-getIcon("lib.d.ts")?.name;                             // "typescript-def"
-getIcon("node_modules", { type: "folder" })?.name;     // "folder-node"
+getIcon("Dockerfile").name;                            // "docker"
+getIcon("lib.d.ts").name;                              // "typescript-def"
+getIcon("node_modules", { isFolder: true }).name;      // "folder-node"
 getIcon("anything.weird", { fallback: "none" });       // null
 ```
 
 #### `getIconByLanguageId(languageId, options?)`
 
 ```ts
-function getIconByLanguageId(
-  languageId: string,
-  options?: LanguageIdOptions,
-): PathIcon | null;
+function getIconByLanguageId(languageId: string, options?: LanguageIdOptions): PathIcon;
+// PathIcon | null when `fallback` may be "none"
 ```
 
-Resolve a [VS Code language ID](https://code.visualstudio.com/docs/languages/identifiers), matched case-insensitively. The result always has `type: "file"` (or `"folder"` if you explicitly pass `fallback: "folder"` and nothing matches). Accepts `cdn`, `version`, `baseUrl`, `fallback`.
+Resolve a [VS Code language ID](https://code.visualstudio.com/docs/languages/identifiers), matched case-insensitively. The result always has `type: "file"`. Accepts `cdn`, `version`, `baseUrl`, and `fallback: "file" | "none"`.
 
 ```ts
-getIconByLanguageId("typescriptreact")?.name;           // "react_ts"
-getIconByLanguageId("shellscript")?.name;               // "console"
-getIconByLanguageId("plaintext")?.name;                 // "document"
+getIconByLanguageId("typescriptreact").name;            // "react_ts"
+getIconByLanguageId("shellscript").name;                // "console"
+getIconByLanguageId("plaintext").name;                  // "document"
 getIconByLanguageId("not-a-language", { fallback: "none" }); // null
 ```
 
@@ -340,8 +333,8 @@ Also re-exported from the root entry. Doesn't load the folder table.
 
 | Function | Signature |
 | --- | --- |
-| `getFileIcon` | `(path, options?: FileIconOptions) => PathIcon \| null` |
-| `getFileIconByLanguageId` | `(languageId, options?: FileLanguageIdOptions) => PathIcon \| null` |
+| `getFileIcon` | `(path, options?: FileIconOptions) => PathIcon` |
+| `getFileIconByLanguageId` | `(languageId, options?: FileLanguageIdOptions) => PathIcon` |
 
 File options: `cdn`, `version`, `baseUrl`, `languageId` (path functions only), and `fallback: "file" | "none"` (default `"file"`).
 
@@ -351,7 +344,7 @@ Also re-exported from the root entry. Doesn't load the file table.
 
 | Function | Signature |
 | --- | --- |
-| `getFolderIcon` | `(path, options?: FolderIconOptions) => PathIcon \| null` |
+| `getFolderIcon` | `(path, options?: FolderIconOptions) => PathIcon` |
 
 Folder options: `cdn`, `version`, `baseUrl`, `open`, and `fallback: "folder" | "none"` (default `"folder"`).
 
@@ -361,10 +354,10 @@ Folder options: `cdn`, `version`, `baseUrl`, `open`, and `fallback: "folder" | "
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `type` | `"file" \| "folder"` | `"file"` | Resolve `path` as a file or a folder. |
+| `isFolder` | `boolean` | `false` | Resolve `path` as a folder instead of a file. Pass `Dirent#isDirectory()` or similar directly. |
 | `open` | `boolean` | `false` | Folders only. Use the expanded variant: `filename` and `url` get `-open` (`folder-src-open.svg`), `name` stays `folder-src`. |
 | `languageId` | `string` | — | Files only. VS Code language ID used when the path matches no filename or extension. A specific path match always wins. Ignored for folders. |
-| `fallback` | `"file" \| "folder" \| "none"` | same as `type` | What to return when nothing matches: the generic `file` icon, the generic `folder` icon, or `null`. |
+| `fallback` | `"file" \| "folder" \| "none"` | matches `isFolder` | What to return when nothing matches: the generic `file` icon, the generic `folder` icon, or `null`. |
 | `cdn` | `"jsdelivr" \| "unpkg"` | `"jsdelivr"` | CDN used to build `url`. |
 | `version` | `string` | `metadata.upstreamVersion` (`"5.39.0"`) | `material-icon-theme` version in `url`. See [Versioning](#versioning-and-icon-data) before changing it. |
 | `baseUrl` | `string` | — | Build `url` as `<baseUrl>/<filename>` instead of using a CDN. Overrides `cdn` and `version`. |
@@ -374,9 +367,9 @@ Which option types accept what:
 | Type | Used by | Accepts |
 | --- | --- | --- |
 | `IconOptions` | `getIcon` | all of the above |
-| `LanguageIdOptions` | `getIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback` |
+| `LanguageIdOptions` | `getIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback: "file" \| "none"` |
 | `FileIconOptions` | `getFileIcon` | `cdn`, `version`, `baseUrl`, `languageId`, `fallback: "file" \| "none"` |
-| `FileLanguageIdOptions` | `getFileIconByLanguageId` | `cdn`, `version`, `baseUrl`, `fallback: "file" \| "none"` |
+| `FileLanguageIdOptions` | `getFileIconByLanguageId` | same as `LanguageIdOptions` |
 | `FolderIconOptions` | `getFolderIcon` | `cdn`, `version`, `baseUrl`, `open`, `fallback: "folder" \| "none"` |
 
 ## Types
@@ -410,7 +403,7 @@ type CdnProvider = "jsdelivr" | "unpkg";
 
 Every type above and every option type is exported from the root entry.
 
-> **Tip:** The return type is always `PathIcon | null` because `fallback: "none"` can produce `null`. With the default fallback the result is never `null` at runtime, so a non-null assertion (`!`) or a small guard is safe.
+> **Tip:** Every resolver returns `PathIcon` (never `null`) at the type level unless `fallback` may be `"none"`, so you don't need `!` or `?.` with the default fallback.
 
 ## Resolution rules
 

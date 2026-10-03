@@ -30,12 +30,12 @@ const EXAMPLES: { call: string; result: PathIcon | null }[] = [
     result: getIcon("src/app.test.ts"),
   },
   {
-    call: 'getIcon("src", { type: "folder" })',
-    result: getIcon("src", { type: "folder" }),
+    call: 'getIcon("src", { isFolder: true })',
+    result: getIcon("src", { isFolder: true }),
   },
   {
-    call: 'getIcon("src", { type: "folder", open: true })',
-    result: getIcon("src", { type: "folder", open: true }),
+    call: 'getIcon("src", { isFolder: true, open: true })',
+    result: getIcon("src", { isFolder: true, open: true }),
   },
   {
     call: 'getIconByLanguageId("rust")',
@@ -46,15 +46,15 @@ const EXAMPLES: { call: string; result: PathIcon | null }[] = [
 const API: { signature: string; returns?: string; description: string }[] = [
   {
     signature: "getIcon(path, options?)",
-    returns: "PathIcon | null",
+    returns: "PathIcon",
     description:
-      "Resolve a file or folder path to its icon name, SVG filename, CDN URL, and match source.",
+      'Resolve a file or folder path to its icon name, SVG filename, CDN URL, and match source. null only with fallback: "none".',
   },
   {
     signature: "getIconByLanguageId(languageId, options?)",
-    returns: "PathIcon | null",
+    returns: "PathIcon",
     description:
-      "Resolve from a VS Code language ID such as rust or shellscript.",
+      'Resolve from a VS Code language ID such as rust or shellscript. null only with fallback: "none".',
   },
   {
     signature: 'import { getFileIcon } from "path-icon/file";',
@@ -70,10 +70,10 @@ const OPTIONS: {
   description: string;
 }[] = [
   {
-    name: "type",
-    type: '"file" | "folder"',
-    defaultValue: '"file"',
-    description: "Resolve the path as a file or a folder.",
+    name: "isFolder",
+    type: "boolean",
+    defaultValue: "false",
+    description: "Resolve the path as a folder instead of a file.",
   },
   {
     name: "open",
@@ -89,7 +89,7 @@ const OPTIONS: {
   {
     name: "fallback",
     type: '"file" | "folder" | "none"',
-    defaultValue: "options.type",
+    defaultValue: "matches isFolder",
     description: 'What to return on no match. "none" returns null.',
   },
   {

@@ -18,8 +18,8 @@ const SAMPLES: { path: string; options?: IconOptions }[] = [
   { path: "Dockerfile" },
   { path: "vite.config.ts" },
   { path: "README.md" },
-  { path: ".github", options: { type: "folder" } },
-  { path: "components", options: { type: "folder", open: true } },
+  { path: ".github", options: { isFolder: true } },
+  { path: "components", options: { isFolder: true, open: true } },
 ];
 
 const ASCII = String.fromCharCode(

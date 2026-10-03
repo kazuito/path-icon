@@ -36,17 +36,17 @@ getIcon("src/index.ts");
 //   source: "fileExtensions",
 // }
 
-getIcon("src", { type: "folder" });
+getIcon("src", { isFolder: true });
 // { name: "folder-src", filename: "folder-src.svg", url: "${jsdelivr}/folder-src.svg", type: "folder", source: "folderNames" }
 
-getIcon("src", { type: "folder", open: true });
+getIcon("src", { isFolder: true, open: true });
 // { name: "folder-src", filename: "folder-src-open.svg", ... }
 \`\`\`
 
 Render it:
 
 \`\`\`tsx
-const icon = getIcon(path, { type: isDir ? "folder" : "file", open: isExpanded })!;
+const icon = getIcon(path, { isFolder: isDir, open: isExpanded });
 <img src={icon.url} alt="" width={16} height={16} />
 \`\`\`
 
@@ -62,24 +62,24 @@ ESM (\`import\`) and CommonJS (\`require\`) both work for every entry. The packa
 
 ## API
 
-### \`getIcon(path: string, options?: IconOptions): PathIcon | null\`
+### \`getIcon(path: string, options?: IconOptions): PathIcon\`
 
-Resolve from a file or folder path. Set \`type: "folder"\` for folders (default \`"file"\`).
+Resolve from a file or folder path. Set \`isFolder: true\` for folders (default \`false\`).
 
-### \`getIconByLanguageId(languageId: string, options?: LanguageIdOptions): PathIcon | null\`
+### \`getIconByLanguageId(languageId: string, options?: LanguageIdOptions): PathIcon\`
 
-Resolve from a [VS Code language ID](https://code.visualstudio.com/docs/languages/identifiers) such as \`"typescript"\`, \`"rust"\`, \`"shellscript"\`. Useful with Monaco or any editor where the path is synthetic. Result has \`type: "file"\` and \`source: "languageIds"\`. Accepts \`cdn\`, \`version\`, \`baseUrl\`, \`fallback\`.
+Resolve from a [VS Code language ID](https://code.visualstudio.com/docs/languages/identifiers) such as \`"typescript"\`, \`"rust"\`, \`"shellscript"\`. Useful with Monaco or any editor where the path is synthetic. Result has \`type: "file"\` and \`source: "languageIds"\`. Accepts \`cdn\`, \`version\`, \`baseUrl\`, \`fallback: "file" | "none"\`.
 
 ### File-only functions (from \`path-icon/file\` or the root entry)
 
-- \`getFileIcon(path, options?: FileIconOptions): PathIcon | null\`
-- \`getFileIconByLanguageId(languageId, options?: FileLanguageIdOptions): PathIcon | null\`
+- \`getFileIcon(path, options?: FileIconOptions): PathIcon\`
+- \`getFileIconByLanguageId(languageId, options?: FileLanguageIdOptions): PathIcon\`
 
 Options: \`cdn\`, \`version\`, \`baseUrl\`, \`languageId\` (not on the ByLanguageId variant), \`fallback: "file" | "none"\` (default \`"file"\`).
 
 ### Folder-only functions (from \`path-icon/folder\` or the root entry)
 
-- \`getFolderIcon(path, options?: FolderIconOptions): PathIcon | null\`
+- \`getFolderIcon(path, options?: FolderIconOptions): PathIcon\`
 
 Options: \`cdn\`, \`version\`, \`baseUrl\`, \`open\`, \`fallback: "folder" | "none"\` (default \`"folder"\`). Only the last path segment is matched (\`"a/b/src"\` → \`folder-src\`).
 
@@ -96,10 +96,10 @@ Options: \`cdn\`, \`version\`, \`baseUrl\`, \`open\`, \`fallback: "folder" | "no
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| \`type\` | \`"file" \\| "folder"\` | \`"file"\` | Resolve \`path\` as a file or a folder. |
+| \`isFolder\` | \`boolean\` | \`false\` | Resolve \`path\` as a folder instead of a file. |
 | \`open\` | \`boolean\` | \`false\` | Folders only: use the expanded variant (\`folder-src-open.svg\`). \`name\` is unchanged; only \`filename\` / \`url\` get \`-open\`. |
 | \`languageId\` | \`string\` | — | Files only: VS Code language ID used when the path matches no filename or extension. Ignored for folders. |
-| \`fallback\` | \`"file" \\| "folder" \\| "none"\` | same as \`type\` | What to return on a miss. \`"none"\` returns \`null\`. |
+| \`fallback\` | \`"file" \\| "folder" \\| "none"\` | matches \`isFolder\` | What to return on a miss. \`"none"\` returns \`null\`. |
 | \`cdn\` | \`"jsdelivr" \\| "unpkg"\` | \`"jsdelivr"\` | CDN used for \`url\`. |
 | \`version\` | \`string\` | \`"${v}"\` | \`material-icon-theme\` version in \`url\`. \`"latest"\` is allowed but may 404 for icons renamed upstream. |
 | \`baseUrl\` | \`string\` | — | Self-hosted SVG directory. \`url\` becomes \`\${baseUrl}/\${filename}\`. Overrides \`cdn\` and \`version\`. |
@@ -147,22 +147,22 @@ Folders (first match wins):
 \`\`\`ts
 import { getIcon, getIconByLanguageId } from "path-icon";
 
-getIcon("package.json")?.name;            // "nodejs"
-getIcon("C:\\\\proj\\\\README.md")?.name;     // "readme"
-getIcon("src/app/page.tsx")?.name;        // "react_ts"
-getIcon(".env.local")?.name;              // "tune"
-getIcon("node_modules", { type: "folder" })?.name; // "folder-node"
-getIcon("whatever", { type: "folder" })?.name;  // "folder" (source: "default")
-getIcon("a.unknownext")?.name;            // "file"   (source: "default")
+getIcon("package.json").name;             // "nodejs"
+getIcon("C:\\\\proj\\\\README.md").name;      // "readme"
+getIcon("src/app/page.tsx").name;         // "react_ts"
+getIcon(".env.local").name;               // "tune"
+getIcon("node_modules", { isFolder: true }).name; // "folder-node"
+getIcon("whatever", { isFolder: true }).name;    // "folder" (source: "default")
+getIcon("a.unknownext").name;             // "file"   (source: "default")
 
 getIcon("a.unknownext", { fallback: "none" });     // null
-getIconByLanguageId("shellscript")?.name;          // "console"
+getIconByLanguageId("shellscript").name;           // "console"
 getIconByLanguageId("nope", { fallback: "none" }); // null
 
-getIcon("src/index.ts", { cdn: "unpkg" })?.url;
+getIcon("src/index.ts", { cdn: "unpkg" }).url;
 // "https://unpkg.com/material-icon-theme@${v}/icons/typescript.svg"
 
-getIcon("src/index.ts", { baseUrl: "/icons" })?.url;
+getIcon("src/index.ts", { baseUrl: "/icons" }).url;
 // "/icons/typescript.svg"
 \`\`\`
 
@@ -179,14 +179,14 @@ getFolderIcon("src", { open: true });
 const { getFileIcon } = require("path-icon/file");
 \`\`\`
 
-TypeScript note: with the default \`fallback\`, the result is never \`null\` at runtime, but the return type is still \`PathIcon | null\`. Use \`!\` or a guard.
+TypeScript note: the return type is \`PathIcon\` unless \`fallback\` may be \`"none"\`, in which case it is \`PathIcon | null\`.
 
 ## Self-hosting SVGs
 
 Copy \`node_modules/material-icon-theme/icons/*.svg\` (install \`material-icon-theme@${v}\` to match the tables) to a public directory, then pass \`baseUrl\`:
 
 \`\`\`ts
-getIcon("main.rs", { baseUrl: "/icons" })?.url; // "/icons/rust.svg"
+getIcon("main.rs", { baseUrl: "/icons" }).url; // "/icons/rust.svg"
 \`\`\`
 
 ## Links

@@ -48,11 +48,7 @@ function Icon({
   folder?: boolean;
   open?: boolean;
 }) {
-  const icon = getIcon(path, {
-    type: folder ? "folder" : "file",
-    open,
-  });
-  if (!icon) return null;
+  const icon = getIcon(path, { isFolder: folder, open });
   return (
     // biome-ignore lint/performance/noImgElement: external CDN, no Next optimizer needed
     <img src={icon.url} alt="" loading="lazy" className="size-4 shrink-0" />
