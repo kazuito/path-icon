@@ -82,7 +82,9 @@ export default async function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", gap: 28 }}>
-          <span style={{ color: "#b6f045" }}>$ npm i material-icon-resolver</span>
+          <span style={{ color: "#b6f045" }}>
+            $ npm i material-icon-resolver
+          </span>
         </div>
         <div style={{ display: "flex", color: "rgba(250, 250, 250, 0.45)" }}>
           {siteConfig.url.replace(/^https?:\/\//, "")}
