@@ -47,7 +47,7 @@ jobs:
           fi
 
   release:
-    name: Publish to npm and create GitHub release
+    name: Stage npm release and create GitHub release
     needs: validate-tag
     if: needs.validate-tag.outputs.should-release == 'true'
     runs-on: ubuntu-latest
@@ -93,8 +93,9 @@ jobs:
         run: npm pack --dry-run
         working-directory: packages/path-icon
 
-      - name: Publish to npm
-        run: npm publish --access public
+      # Approve with 2FA to go live: npm stage list path-icon → npm stage approve <stage-id>
+      - name: Stage npm release
+        run: npm stage publish --access public
         working-directory: packages/path-icon
 
       - name: Create GitHub release
