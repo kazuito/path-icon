@@ -6,6 +6,7 @@ import {
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { Code } from "./_components/code";
+import { EditorPreview } from "./_components/editor-preview";
 import { InstallCommand } from "./_components/install-command";
 
 const NPM_URL = siteConfig.npm;
@@ -178,6 +179,15 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
+      <section className="mt-14 space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Ideal for file explorers, editor tabs, breadcrumbs, and any interface
+          that displays files and folders. Every icon in the preview below is
+          resolved with material-icon-resolver.
+        </p>
+        <EditorPreview />
+      </section>
 
       <Section title="Usage">
         <pre className="overflow-x-auto scrollbar-none rounded-lg border border-border bg-card/40 p-4 font-mono text-sm leading-relaxed">
