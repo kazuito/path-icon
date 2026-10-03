@@ -85,7 +85,7 @@
     "generate": "bun scripts/generate.ts",
     "sync-vscode-languages": "bun scripts/sync-vscode-languages.ts && bun run generate",
     "validate-icons": "bun scripts/validate-icons.ts",
-    "test": "vitest run",
+    "test": "bun test ./test",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint",
     "format": "biome format --write",
@@ -95,9 +95,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.12",
+    "@types/bun": "^1.4.2",
     "@types/node": "^26.5.0",
     "tsdown": "^0.23.0",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "typescript": "^6.0.3"
   }
 }

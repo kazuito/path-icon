@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { metadata } from "../src/generated/metadata.ts";
 import { getIcon, getIconByLanguageId } from "../src/index.ts";
 

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { buildCdnUrl, getIcon, joinBaseUrl } from "../src/index.ts";
 
 describe("CDN URL", () => {

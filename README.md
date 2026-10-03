@@ -503,7 +503,7 @@ Bun workspace: the library lives in `packages/path-icon`, the website and playgr
 
 | Command | What it does |
 | --- | --- |
-| `bun run test` | Run the vitest suites |
+| `bun run test` | Run the `bun test` suites |
 | `bun run typecheck` | `tsc --noEmit` |
 | `bun run build` | Build ESM/CJS + type declarations with tsdown |
 | `bun run lint` / `bun run format` | Biome |

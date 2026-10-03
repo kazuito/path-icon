@@ -14,7 +14,7 @@
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["bun"]
   },
   "include": ["src/**/*", "test/**/*", "scripts/**/*"]
 }

@@ -26,7 +26,7 @@ Bun workspace monorepo:
 - `scripts/language-id-extensions.ts` — residual language-id associations from third-party extensions; each entry cites its origin
 - `vendor/vscode-material-icon-theme/` — git submodule pinned to a specific upstream release tag; the source of truth for which version is generated
 - `scripts/validate-icons.ts` — fetches the published npm tarball and asserts every referenced SVG name actually exists
-- `test/` — vitest suites (file resolver, folder resolver, CDN URL)
+- `test/` — `bun test` suites (file resolver, folder resolver, CDN URL)
 - `dist/` — tsdown output (`.mjs` / `.cjs` + `.d.mts` / `.d.cts`); gitignored
 - `PLAN.md` — original Japanese design doc, kept for context
 
@@ -37,7 +37,7 @@ git submodule update --init --recursive  # required before first generate
 bun install          # from the repo root
 # from packages/path-icon:
 bun run typecheck    # tsc --noEmit
-bun run test         # vitest run
+bun run test         # bun test ./test (scoped so vendor/ tests are skipped)
 bun run build        # tsdown → ESM/CJS outputs for root, file, and folder entries
 bun run generate     # regenerate src/generated/*.ts from the pinned submodule
 bun run sync-vscode-languages  # refresh scripts/generated/vscode-language-map.json from the pinned VS Code tag, then regenerate

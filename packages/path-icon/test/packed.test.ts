@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { fileNames } from "../src/generated/file-icons.ts";
 import { folderNames } from "../src/generated/folder-icons.ts";
 import { expandBraces, unpack } from "../src/packed.ts";

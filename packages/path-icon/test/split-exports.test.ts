@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { getFileIcon, getFileIconByLanguageId } from "../src/file.ts";
 import { getFolderIcon } from "../src/folder.ts";
 
