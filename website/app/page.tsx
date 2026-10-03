@@ -1,6 +1,4 @@
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 import { InstallCommand } from "./_components/install-command";
 
@@ -10,82 +8,39 @@ const REPO_URL = siteConfig.repo;
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-5 py-16 sm:px-6">
-      <div className="space-y-10">
+      <div>
         <div className="space-y-5">
-          <h1 className="font-mono text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+          <h1 className="font-medium tracking-tight text-foreground text-xl">
             Material Icon Resolver
           </h1>
-          <p className="max-w-xl text-base leading-relaxed text-muted-foreground">
+          <p className="max-w-xl text-base leading-relaxed">
             npm library that resolves Material Icon Theme icon names, filenames,
             and CDN URLs from a file path, folder path, or language ID.
           </p>
         </div>
 
-        <div className="space-y-1.5 font-mono text-sm">
+        <div className="space-y-1.5 font-mono text-sm mt-6">
           <InstallCommand cmd="npm i material-icon-resolver" />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Button render={<Link href="/try" />} nativeButton={false} size="lg">
-            Try it online
-            <ArrowRight />
-          </Button>
-          <Button
-            render={
-              <Link
-                href={NPM_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label="npm"
-              />
-            }
-            nativeButton={false}
-            variant="outline"
-            size="lg"
-            className="font-mono"
+        <div className="flex flex-wrap items-center gap-6 mt-6 *:text-sm *:text-muted-foreground *:hover:underline">
+          <Link href="/try">Playground</Link>
+          <Link
+            href={NPM_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="npm"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-            >
-              <path
-                fill="#e53935"
-                d="M4 4v24h24V4Zm20 20h-4V12h-4v12H8V8h16Z"
-              />
-            </svg>
             npm
-          </Button>
-          <Button
-            render={
-              <Link
-                href={REPO_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label="GitHub repository"
-              />
-            }
-            nativeButton={false}
-            variant="outline"
-            size="lg"
-            className="font-mono"
+          </Link>
+          <Link
+            href={REPO_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="GitHub repository"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 32 32"
-              aria-hidden="true"
-            >
-              <path
-                fill="#546e7a"
-                d="m13.844 7.536-1.288-1.072A2 2 0 0 0 11.276 6H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2H15.124a2 2 0 0 1-1.28-.464"
-              />
-              <path
-                fill="#eceff1"
-                d="M23 10a9.03 9.03 0 0 0-9 9.063 9.08 9.08 0 0 0 6.157 8.609c.45.072.593-.21.593-.453v-1.532c-2.493.544-3.024-1.214-3.024-1.214a2.42 2.42 0 0 0-.998-1.333c-.82-.561.062-.544.062-.544a1.9 1.9 0 0 1 1.377.933 1.925 1.925 0 0 0 2.62.754 1.96 1.96 0 0 1 .566-1.215c-1.998-.227-4.094-1.007-4.094-4.459a3.52 3.52 0 0 1 .927-2.456 3.26 3.26 0 0 1 .09-2.392s.754-.245 2.474.924a8.6 8.6 0 0 1 4.5 0c1.718-1.169 2.476-.924 2.476-.924a3.26 3.26 0 0 1 .088 2.392 3.52 3.52 0 0 1 .927 2.456c0 3.462-2.105 4.223-4.112 4.45a2.17 2.17 0 0 1 .622 1.676v2.484c0 .244.143.533.602.453A9.08 9.08 0 0 0 23 10"
-              />
-            </svg>
-            github
-          </Button>
+            GitHub
+          </Link>
         </div>
       </div>
     </main>
