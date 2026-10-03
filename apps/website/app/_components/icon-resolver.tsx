@@ -1,12 +1,12 @@
 "use client";
 
-import { metadata, type IconOptions, getIcon } from "path-icon";
 import {
   parseAsBoolean,
   parseAsString,
   parseAsStringLiteral,
   useQueryStates,
 } from "nuqs";
+import { getIcon, type IconOptions, metadata } from "path-icon";
 import { useMemo, useState } from "react";
 import { Header } from "./header";
 import { PathInput } from "./path-input";

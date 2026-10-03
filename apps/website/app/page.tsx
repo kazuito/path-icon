@@ -1,5 +1,5 @@
-import { type PathIcon, getIcon, getIconByLanguageId } from "path-icon";
 import Link from "next/link";
+import { getIcon, getIconByLanguageId, type PathIcon } from "path-icon";
 import { siteConfig } from "@/lib/site";
 import { Code } from "./_components/code";
 import { EditorPreview } from "./_components/editor-preview";
@@ -13,7 +13,7 @@ const USAGE = `import { getIcon } from "path-icon";
 const icon = getIcon("src/index.ts");
 // icon.name     → "typescript"
 // icon.filename → "typescript.svg"
-// icon.url   → "https://cdn.jsdelivr.net/.../icons/typescript.svg"
+// icon.url      → "https://cdn.jsdelivr.net/.../icons/typescript.svg"
 // icon.source   → "fileExtensions"`;
 
 const EXAMPLES: { call: string; result: PathIcon | null }[] = [

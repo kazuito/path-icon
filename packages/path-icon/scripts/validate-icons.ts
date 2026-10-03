@@ -20,7 +20,7 @@ async function loadGenerated() {
 }
 
 async function fetchIcons(version: string): Promise<Set<string>> {
-  const dir = mkdtempSync(resolve(tmpdir(), "mir-validate-"));
+  const dir = mkdtempSync(resolve(tmpdir(), "path-icon-validate-"));
   console.log(`fetching ${PACKAGE}@${version} into ${dir}`);
 
   const meta = (await (

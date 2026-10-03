@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "material-icon-resolver-monorepo",
+      "name": "path-icon-monorepo",
       "devDependencies": {
         "lefthook": "^2.1.16",
       },

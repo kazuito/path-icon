@@ -9,8 +9,8 @@ import {
   MoreHorizontal,
   Type,
 } from "lucide-react";
-import type { IconType, PathIcon, IconSource } from "path-icon";
 import Link from "next/link";
+import type { IconSource, IconType, PathIcon } from "path-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
