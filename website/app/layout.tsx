@@ -103,8 +103,8 @@ const jsonLd = {
     },
     {
       "@type": "WebApplication",
-      "@id": `${siteUrl}/try#webapp`,
-      url: `${siteUrl}/try`,
+      "@id": `${siteUrl}/playground#webapp`,
+      url: `${siteUrl}/playground`,
       name: `${siteConfig.name} — Playground`,
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Any (web browser)",

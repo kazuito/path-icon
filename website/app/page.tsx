@@ -160,7 +160,7 @@ export default function Home() {
         </div>
 
         <div className="flex flex-wrap items-center gap-6 mt-6 *:text-sm *:text-muted-foreground *:hover:underline">
-          <Link href="/try">Playground</Link>
+          <Link href="/playground">Playground</Link>
           <Link
             href={NPM_URL}
             target="_blank"

@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/try`,
+      url: `${siteUrl}/playground`,
       lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
