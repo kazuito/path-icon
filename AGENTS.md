@@ -10,6 +10,7 @@ Resolve VS Code Material Icon Theme icon names, SVG filenames, and CDN URLs from
 - `src/folder.ts` — folder-only resolver for `material-icon-resolver/folder`; imports only folder icon generated data
 - `src/result.ts` — shared result / CDN URL construction
 - `src/normalize.ts` — path normalization, basename/parent split, extension candidates
+- `src/packed.ts` — `unpack` decoder for the brace-trie packed tables in `src/generated/*.ts`; also used by the generator's round-trip assertion
 - `src/cdn.ts` — jsDelivr / unpkg / `baseUrl` URL builders
 - `src/types.ts` — public type definitions
 - `src/generated/*.ts` — **auto-generated; do not edit by hand**. Re-run `pnpm generate`.
@@ -67,6 +68,7 @@ pnpm format          # biome format --write
 - Folder resolver order: `rootFolderNames[basename]` → `folderNames[basename]` → fallback. Keys are pre-expanded with the upstream `extendFolderNames` rule (`name`, `.name`, `_name`, `-name`, `__name__`).
 - The `-open` suffix for expanded folders is appended only at filename construction in `src/result.ts#makeResult`; map values store the bare icon name.
 - Keep file-only and folder-only entry points independent: `src/file.ts` must not import `src/generated/folder-icons.ts`, and `src/folder.ts` must not import `src/generated/file-icons.ts`.
+- Generated tables are packed as `name|keys` groups joined by `;`, where `keys` is a brace-expansion trie (`webpack.{base.{cjs,js},cjs}`), an empty key means the key equals `name`, and folder icons drop the `folder-` prefix. Keys or icons containing `; | , { }`, and folder icons without the `folder-` prefix, fail `pnpm generate`. Lookup tables are `Object.create(null)`, so keys like `constructor` / `__proto__` behave as ordinary keys.
 - Icons with `clone: { ... }` in upstream are **skipped** by the generator — upstream generates those SVGs at runtime and they aren't published in the npm package. Don't try to add them back.
 - Default `activeIconPack` is `"angular"` (matches upstream `defaultConfig`). Icons gated by other packs (vue, react, qwik, …) are excluded.
 - VS Code language IDs ARE used. Upstream `languageIcons.ts` is read at generate time and each language id is expanded to file extensions / fileNames through layered sources, first write wins: (1) explicit `fileIcons.ts#fileExtensions` / `fileNames` entries, (2) `scripts/generated/vscode-language-map.json` — synced from the `contributes.languages` of VS Code's built-in extensions at the tag pinned in `scripts/sync-vscode-languages.ts` (`pnpm sync-vscode-languages` to refresh; bump `VSCODE_TAG` there for a newer VS Code), (3) the residual hand map `scripts/language-id-extensions.ts` for ids defined by third-party marketplace extensions — every entry must cite its origin (`via … — <url>` or `curated: …`), (4) for ids with no source whose icon would otherwise be unreachable, the id itself is used as a file extension (fallback). `pnpm generate` warns when a residual entry goes stale or fully shadowed (delete it) and when a new upstream id lands in the fallback (add a sourced entry or re-sync).
