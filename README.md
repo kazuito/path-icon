@@ -1,5 +1,3 @@
-![path-icon](https://raw.githubusercontent.com/kazuito/path-icon/main/assets/banner.png)
-
 # path-icon
 
 [![npm version](https://img.shields.io/npm/v/path-icon?color=b6f045&labelColor=0a0a0a)](https://www.npmjs.com/package/path-icon)
@@ -523,5 +521,3 @@ See [`AGENTS.md`](./AGENTS.md) for the full contributor guide.
 ## License
 
 [MIT](./LICENSE). Icons belong to the [Material Icon Theme](https://github.com/material-extensions/vscode-material-icon-theme) project (MIT) and are loaded from its npm package. They are not redistributed here.
-
-Created by [Kazuma Ito](https://github.com/kazuito).
