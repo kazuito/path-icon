@@ -125,6 +125,15 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --sh-identifier: oklch(0.985 0 0);
+  --sh-keyword: #ff7b72;
+  --sh-string: #b6f045;
+  --sh-class: #ffa657;
+  --sh-property: #79c0ff;
+  --sh-entity: #d2a8ff;
+  --sh-jsxliterals: oklch(0.985 0 0);
+  --sh-sign: oklch(0.708 0 0);
+  --sh-comment: oklch(0.556 0 0);
 }
 
 @layer base {
