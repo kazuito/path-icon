@@ -40,7 +40,7 @@ function lookupFolder(path: string): Hit | null {
  * Resolve a Material Icon Theme folder icon from a folder path.
  *
  * This entry only imports folder icon lookup data. Use
- * `material-icon-resolver/file` for file-only resolution, or the root entry
+ * `path-icon/file` for file-only resolution, or the root entry
  * for the combined resolver.
  */
 export function resolveMaterialFolderIcon(

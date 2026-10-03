@@ -1,4 +1,4 @@
-import { metadata } from "material-icon-resolver";
+import { metadata } from "path-icon";
 import { siteConfig, siteUrl } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -8,13 +8,13 @@ const jsdelivr = `https://cdn.jsdelivr.net/npm/material-icon-theme@${v}/icons`;
 
 const body = `# ${siteConfig.name}
 
-> \`material-icon-resolver\` is a zero-dependency TypeScript library that maps a file path, folder path, or VS Code language ID to the matching [Material Icon Theme](https://github.com/${metadata.upstreamRepo}) icon: its icon name, SVG filename, and a CDN URL to the SVG. It works in Node, Bun, Deno, and browsers, ships ESM + CJS with types, and bundles lookup tables generated from \`material-icon-theme@${v}\`.
+> \`path-icon\` is a zero-dependency TypeScript library that maps a file path, folder path, or VS Code language ID to the matching [Material Icon Theme](https://github.com/${metadata.upstreamRepo}) icon: its icon name, SVG filename, and a CDN URL to the SVG. It works in Node, Bun, Deno, and browsers, ships ESM + CJS with types, and bundles lookup tables generated from \`material-icon-theme@${v}\`.
 
-This file is a condensed digest. The canonical, complete documentation is the [README](https://raw.githubusercontent.com/kazuito/material-icon-resolver/main/README.md) (raw Markdown); prefer it when this digest is not enough.
+This file is a condensed digest. The canonical, complete documentation is the [README](https://raw.githubusercontent.com/kazuito/path-icon/main/README.md) (raw Markdown); prefer it when this digest is not enough.
 
 Key facts:
 
-- Package: \`material-icon-resolver\` on npm. Install with \`npm install material-icon-resolver\` (or pnpm / yarn / bun).
+- Package: \`path-icon\` on npm. Install with \`npm install path-icon\` (or pnpm / yarn / bun).
 - The library does **not** ship SVGs. It returns names and URLs; the SVGs are served from the \`material-icon-theme\` npm package via jsDelivr (default) or unpkg, or from your own host via \`baseUrl\`.
 - All functions are pure and synchronous. No I/O, no filesystem access: the path is only parsed as a string, and the file does not need to exist.
 - Default CDN version is pinned to \`${v}\` (\`metadata.upstreamVersion\`), not \`latest\`, because the bundled tables match that release's SVG set exactly.
@@ -25,7 +25,7 @@ Key facts:
 ## Quick start
 
 \`\`\`ts
-import { resolveMaterialIcon } from "material-icon-resolver";
+import { resolveMaterialIcon } from "path-icon";
 
 resolveMaterialIcon("src/index.ts");
 // {
@@ -54,9 +54,9 @@ const icon = resolveMaterialIcon(path, { type: isDir ? "folder" : "file", open: 
 
 | Import | Contains | Use when |
 | --- | --- | --- |
-| \`material-icon-resolver\` | File + folder + language-ID resolvers, CDN helpers, \`metadata\` | You need both files and folders |
-| \`material-icon-resolver/file\` | File + language-ID resolvers only (no folder table) | Smaller bundle, files only |
-| \`material-icon-resolver/folder\` | Folder resolver only (no file table) | Smaller bundle, folders only |
+| \`path-icon\` | File + folder + language-ID resolvers, CDN helpers, \`metadata\` | You need both files and folders |
+| \`path-icon/file\` | File + language-ID resolvers only (no folder table) | Smaller bundle, files only |
+| \`path-icon/folder\` | Folder resolver only (no file table) | Smaller bundle, folders only |
 
 ESM (\`import\`) and CommonJS (\`require\`) both work for every entry. The package has \`sideEffects: false\`.
 
@@ -78,7 +78,7 @@ Same as \`resolveMaterialIcon(...)?.name\`. Example: \`getMaterialIconName("pack
 
 Same as \`resolveMaterialIcon(...)?.cdnUrl\`. Example: \`getMaterialIconCdnUrl("package.json")\` → \`"${jsdelivr}/nodejs.svg"\`.
 
-### File-only functions (from \`material-icon-resolver/file\` or the root entry)
+### File-only functions (from \`path-icon/file\` or the root entry)
 
 - \`resolveMaterialFileIcon(path, options?: ResolveMaterialFileIconOptions): ResolvedMaterialIcon | null\`
 - \`resolveMaterialFileIconByLanguageId(languageId, options?: ResolveFileByLanguageIdOptions): ResolvedMaterialIcon | null\`
@@ -87,7 +87,7 @@ Same as \`resolveMaterialIcon(...)?.cdnUrl\`. Example: \`getMaterialIconCdnUrl("
 
 Options: \`cdn\`, \`version\`, \`baseUrl\`, \`languageId\` (not on the ByLanguageId variant), \`fallback: "file" | "none"\` (default \`"file"\`).
 
-### Folder-only functions (from \`material-icon-resolver/folder\` or the root entry)
+### Folder-only functions (from \`path-icon/folder\` or the root entry)
 
 - \`resolveMaterialFolderIcon(path, options?: ResolveMaterialFolderIconOptions): ResolvedMaterialIcon | null\`
 - \`getMaterialFolderIconName(path, options?): string | null\`
@@ -162,7 +162,7 @@ import {
   resolveMaterialIconByLanguageId,
   getMaterialIconName,
   getMaterialIconCdnUrl,
-} from "material-icon-resolver";
+} from "path-icon";
 
 getMaterialIconName("package.json");                  // "nodejs"
 getMaterialIconName("C:\\\\proj\\\\README.md");           // "readme"
@@ -186,14 +186,14 @@ getMaterialIconCdnUrl("src/index.ts", { baseUrl: "/icons" });
 Split entries:
 
 \`\`\`ts
-import { resolveMaterialFileIcon } from "material-icon-resolver/file";
-import { resolveMaterialFolderIcon } from "material-icon-resolver/folder";
+import { resolveMaterialFileIcon } from "path-icon/file";
+import { resolveMaterialFolderIcon } from "path-icon/folder";
 
 resolveMaterialFileIcon("src/index.ts", { languageId: "typescript" });
 resolveMaterialFolderIcon("src", { open: true });
 
 // CommonJS
-const { resolveMaterialFileIcon } = require("material-icon-resolver/file");
+const { resolveMaterialFileIcon } = require("path-icon/file");
 \`\`\`
 
 TypeScript note: with the default \`fallback\`, the result is never \`null\` at runtime, but the return type is still \`ResolvedMaterialIcon | null\`. Use \`!\` or a guard.
@@ -210,7 +210,7 @@ getMaterialIconCdnUrl("main.rs", { baseUrl: "/icons" }); // "/icons/rust.svg"
 
 - [Website](${siteUrl}/): overview, usage, API, options
 - [Playground](${siteUrl}/playground): paste paths and see the resolved icons live
-- [README (raw Markdown)](https://raw.githubusercontent.com/kazuito/material-icon-resolver/main/README.md): canonical, complete documentation
+- [README (raw Markdown)](https://raw.githubusercontent.com/kazuito/path-icon/main/README.md): canonical, complete documentation
 - [Source](${siteConfig.repo}): GitHub repository (MIT)
 - [npm](${siteConfig.npm}): package page
 - [Material Icon Theme](https://github.com/${metadata.upstreamRepo}): upstream icon set and association rules

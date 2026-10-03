@@ -9,11 +9,7 @@ import {
   MoreHorizontal,
   Type,
 } from "lucide-react";
-import type {
-  IconType,
-  ResolvedMaterialIcon,
-  ResolveSource,
-} from "material-icon-resolver";
+import type { IconType, ResolvedMaterialIcon, ResolveSource } from "path-icon";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

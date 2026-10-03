@@ -77,7 +77,7 @@ function lookupLanguageId(languageId: string): Hit | null {
  * Resolve a Material Icon Theme file icon from a file path.
  *
  * This entry only imports file icon lookup data. Use
- * `material-icon-resolver/folder` for folder-only resolution, or the root
+ * `path-icon/folder` for folder-only resolution, or the root
  * entry for the combined resolver.
  */
 export function resolveMaterialFileIcon(

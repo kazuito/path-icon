@@ -1,5 +1,5 @@
 {
-  "name": "material-icon-resolver-monorepo",
+  "name": "path-icon-monorepo",
   "private": true,
   "packageManager": "bun@1.4.2",
   "workspaces": [
@@ -11,7 +11,7 @@
     "lint": "bun run --filter '*' lint",
     "format": "bun run --filter '*' format",
     "typecheck": "bun run --filter '*' typecheck",
-    "test": "bun run --filter material-icon-resolver test",
+    "test": "bun run --filter path-icon test",
     "prepare": "lefthook install"
   },
   "devDependencies": {

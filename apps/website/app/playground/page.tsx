@@ -37,9 +37,7 @@ export const metadata: Metadata = {
 export default function PlaygroundPage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-5 sm:px-6">
-      <h1 className="sr-only">
-        Material Icon Resolver — interactive online playground
-      </h1>
+      <h1 className="sr-only">path-icon — interactive online playground</h1>
       <Suspense>
         <IconResolver />
       </Suspense>

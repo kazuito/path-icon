@@ -4,7 +4,7 @@ import {
   metadata,
   type ResolveMaterialIconOptions,
   resolveMaterialIcon,
-} from "material-icon-resolver";
+} from "path-icon";
 import {
   parseAsBoolean,
   parseAsString,

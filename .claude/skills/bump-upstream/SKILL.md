@@ -2,7 +2,7 @@
 name: bump-upstream
 description: >-
   Safely bump the pinned upstream `vscode-material-icon-theme` version in this
-  repo (material-icon-resolver) and regenerate the icon association data. Use
+  repo (path-icon) and regenerate the icon association data. Use
   this whenever the user asks to update, bump, upgrade, or sync the upstream /
   vendor / submodule version, regenerate icons, "update to the latest
   material-icon-theme", or mentions a new upstream release tag (e.g. "v5.35.0").
@@ -21,7 +21,7 @@ submodule to a new release tag and regenerating — but doing it carelessly ship
 icon names whose SVGs don't exist on the CDN, so the steps below exist to make
 that impossible to miss.
 
-Run every command below from `packages/material-icon-resolver/` (the library
+Run every command below from `packages/path-icon/` (the library
 package in this bun workspace); paths are relative to it unless noted.
 
 Read the root `AGENTS.md` ("Generator Setup" and "Safety / Gotchas") if you need deeper

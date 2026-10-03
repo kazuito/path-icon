@@ -1,16 +1,16 @@
-![material-icon-resolver](https://raw.githubusercontent.com/kazuito/material-icon-resolver/main/assets/banner.png)
+![path-icon](https://raw.githubusercontent.com/kazuito/path-icon/main/assets/banner.png)
 
-# material-icon-resolver
+# path-icon
 
-[![npm version](https://img.shields.io/npm/v/material-icon-resolver?color=b6f045&labelColor=0a0a0a)](https://www.npmjs.com/package/material-icon-resolver)
-[![license](https://img.shields.io/npm/l/material-icon-resolver?color=b6f045&labelColor=0a0a0a)](./LICENSE)
+[![npm version](https://img.shields.io/npm/v/path-icon?color=b6f045&labelColor=0a0a0a)](https://www.npmjs.com/package/path-icon)
+[![license](https://img.shields.io/npm/l/path-icon?color=b6f045&labelColor=0a0a0a)](./LICENSE)
 
 Find the [Material Icon Theme](https://github.com/material-extensions/vscode-material-icon-theme) icon for any file path, folder path, or VS Code language ID. You get back the icon name, the SVG filename, and a CDN URL ready to drop into an `<img>`.
 
-**[Website](https://material-icon-resolver.vercel.app)** · **[Playground](https://material-icon-resolver.vercel.app/playground)** · **[llms.txt](https://material-icon-resolver.vercel.app/llms.txt)** · **[npm](https://www.npmjs.com/package/material-icon-resolver)**
+**[Website](https://path-icon.vercel.app)** · **[Playground](https://path-icon.vercel.app/playground)** · **[llms.txt](https://path-icon.vercel.app/llms.txt)** · **[npm](https://www.npmjs.com/package/path-icon)**
 
 ```ts
-import { getMaterialIconCdnUrl } from "material-icon-resolver";
+import { getMaterialIconCdnUrl } from "path-icon";
 
 getMaterialIconCdnUrl("src/index.ts");
 // "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
@@ -46,24 +46,24 @@ getMaterialIconCdnUrl("src/index.ts");
 ## Install
 
 ```sh
-npm install material-icon-resolver
+npm install path-icon
 # or
-pnpm add material-icon-resolver
-yarn add material-icon-resolver
-bun add material-icon-resolver
+pnpm add path-icon
+yarn add path-icon
+bun add path-icon
 ```
 
 Deno:
 
 ```ts
-import { resolveMaterialIcon } from "npm:material-icon-resolver";
+import { resolveMaterialIcon } from "npm:path-icon";
 ```
 
 Browser without a bundler (ES module from a CDN):
 
 ```html
 <script type="module">
-  import { resolveMaterialIcon } from "https://cdn.jsdelivr.net/npm/material-icon-resolver/+esm";
+  import { resolveMaterialIcon } from "https://cdn.jsdelivr.net/npm/path-icon/+esm";
 </script>
 ```
 
@@ -74,7 +74,7 @@ Browser without a bundler (ES module from a CDN):
 ### Resolve a file
 
 ```ts
-import { resolveMaterialIcon } from "material-icon-resolver";
+import { resolveMaterialIcon } from "path-icon";
 
 resolveMaterialIcon("src/index.ts");
 // {
@@ -101,7 +101,7 @@ resolveMaterialIcon("src", { type: "folder", open: true });
 ### Resolve a language ID
 
 ```ts
-import { resolveMaterialIconByLanguageId } from "material-icon-resolver";
+import { resolveMaterialIconByLanguageId } from "path-icon";
 
 resolveMaterialIconByLanguageId("rust");
 // { name: "rust", filename: "rust.svg", type: "file", source: "languageIds", ... }
@@ -117,7 +117,7 @@ resolveMaterialIcon("package.json", { languageId: "rust" });        // → nodej
 ### Just the name or the URL
 
 ```ts
-import { getMaterialIconName, getMaterialIconCdnUrl } from "material-icon-resolver";
+import { getMaterialIconName, getMaterialIconCdnUrl } from "path-icon";
 
 getMaterialIconName("package.json");
 // "nodejs"
@@ -152,7 +152,7 @@ Every result includes a `source` field that says which table matched. That is ha
 ### Render an icon
 
 ```tsx
-import { resolveMaterialIcon } from "material-icon-resolver";
+import { resolveMaterialIcon } from "path-icon";
 
 function FileIcon({ path, isDir = false, isOpen = false }: {
   path: string;
@@ -202,7 +202,7 @@ Monaco models often have synthetic URIs like `inmemory://model/1`. Use the model
 import {
   resolveMaterialIcon,
   resolveMaterialIconByLanguageId,
-} from "material-icon-resolver";
+} from "path-icon";
 
 // Path is meaningful: use it, with the language ID as a fallback hint
 const icon = resolveMaterialIcon(model.uri.path, { languageId: model.getLanguageId() });
@@ -242,8 +242,8 @@ getMaterialIconCdnUrl("main.rs", { baseUrl: "https://assets.example.com/icons/" 
 The root entry includes both the file and folder tables. If you only need one side, import from a subpath:
 
 ```ts
-import { resolveMaterialFileIcon } from "material-icon-resolver/file";
-import { resolveMaterialFolderIcon } from "material-icon-resolver/folder";
+import { resolveMaterialFileIcon } from "path-icon/file";
+import { resolveMaterialFolderIcon } from "path-icon/folder";
 
 resolveMaterialFileIcon("src/index.ts");
 resolveMaterialFolderIcon("src", { open: true });
@@ -251,22 +251,22 @@ resolveMaterialFolderIcon("src", { open: true });
 
 ```js
 // CommonJS works the same way
-const { resolveMaterialFileIcon } = require("material-icon-resolver/file");
+const { resolveMaterialFileIcon } = require("path-icon/file");
 ```
 
 Approximate gzipped size at `5.39.0`, including the lookup data:
 
 | Entry | Contains | gzip |
 | --- | --- | --- |
-| `material-icon-resolver` | Files + folders + language IDs | ~16 kB |
-| `material-icon-resolver/file` | Files + language IDs | ~12 kB |
-| `material-icon-resolver/folder` | Folders | ~4.5 kB |
+| `path-icon` | Files + folders + language IDs | ~16 kB |
+| `path-icon/file` | Files + language IDs | ~12 kB |
+| `path-icon/folder` | Folders | ~4.5 kB |
 
 ## API reference
 
 All functions are synchronous and pure. The `path` argument accepts POSIX (`a/b`) and Windows (`a\b`) separators, and matching is case-insensitive.
 
-### Root entry (`material-icon-resolver`)
+### Root entry (`path-icon`)
 
 #### `resolveMaterialIcon(path, options?)`
 
@@ -377,7 +377,7 @@ metadata;
 
 The constant `"material-icon-theme"`: the npm package name used in CDN URLs.
 
-### File entry (`material-icon-resolver/file`)
+### File entry (`path-icon/file`)
 
 Also re-exported from the root entry. Doesn't load the folder table.
 
@@ -390,7 +390,7 @@ Also re-exported from the root entry. Doesn't load the folder table.
 
 File options: `cdn`, `version`, `baseUrl`, `languageId` (path functions only), and `fallback: "file" | "none"` (default `"file"`).
 
-### Folder entry (`material-icon-resolver/folder`)
+### Folder entry (`path-icon/folder`)
 
 Also re-exported from the root entry. Doesn't load the file table.
 
@@ -504,8 +504,8 @@ Language IDs map to the icon VS Code shows for that language: `typescriptreact` 
 - **Pinned upstream.** Each release of this package is generated from one tagged release of `vscode-material-icon-theme`, currently **5.39.0**. You can check it at runtime with `metadata.upstreamVersion`.
 - **Why the CDN version is pinned too.** Upstream adds, renames, and occasionally removes icons. The bundled tables only know the icon names that exist in the pinned release, so `cdnUrl` uses the same version by default. CI checks every referenced icon against the published npm tarball, so every default URL points at an SVG that exists.
 - **Using `version: "latest"`.** Allowed, but you mix this package's associations with a newer icon set. If upstream renames an icon, the URL may 404. Prefer upgrading this package instead.
-- **Staying current.** New upstream releases are tracked, and this package is regenerated and released for them. Update `material-icon-resolver` to get new icons and associations.
-- **Package version ≠ upstream version.** `material-icon-resolver` follows its own semver. Use `metadata.upstreamVersion` to see which icon set you have.
+- **Staying current.** New upstream releases are tracked, and this package is regenerated and released for them. Update `path-icon` to get new icons and associations.
+- **Package version ≠ upstream version.** `path-icon` follows its own semver. Use `metadata.upstreamVersion` to see which icon set you have.
 
 ## Limitations
 
@@ -532,21 +532,21 @@ Yes. There are no Node built-ins, no dependencies, and no I/O.
 Not from this package. Fetch `cdnUrl`, or self-host the SVGs and import them with your bundler, using `name` / `filename` as the key.
 
 **How do I try paths without installing?**
-Open the **[Playground](https://material-icon-resolver.vercel.app/playground)**: paste paths and see the resolved icons live.
+Open the **[Playground](https://path-icon.vercel.app/playground)**: paste paths and see the resolved icons live.
 
 ## For AI agents
 
-A condensed, self-contained reference written for LLMs and coding agents is served at **[`/llms.txt`](https://material-icon-resolver.vercel.app/llms.txt)**. This README remains the canonical, complete documentation.
+A condensed, self-contained reference written for LLMs and coding agents is served at **[`/llms.txt`](https://path-icon.vercel.app/llms.txt)**. This README remains the canonical, complete documentation.
 
 ## Development
 
 ```sh
-git clone --recurse-submodules https://github.com/kazuito/material-icon-resolver.git
-cd material-icon-resolver
+git clone --recurse-submodules https://github.com/kazuito/path-icon.git
+cd path-icon
 bun install
 ```
 
-Bun workspace: the library lives in `packages/material-icon-resolver`, the website and playground in `apps/website`. Run library commands from `packages/material-icon-resolver`.
+Bun workspace: the library lives in `packages/path-icon`, the website and playground in `apps/website`. Run library commands from `packages/path-icon`.
 
 | Command | What it does |
 | --- | --- |
@@ -559,9 +559,9 @@ Bun workspace: the library lives in `packages/material-icon-resolver`, the websi
 | `bun run validate-icons` | Check that every referenced SVG exists in the published `material-icon-theme` tarball |
 | `bun run --filter website dev` | Run the website and playground locally (from the repo root) |
 
-- Upstream lives as a git submodule at `packages/material-icon-resolver/vendor/vscode-material-icon-theme`, pinned to a release tag. To bump it, check out the new tag in the submodule, then run `bun run generate && bun run validate-icons && bun run test`.
+- Upstream lives as a git submodule at `packages/path-icon/vendor/vscode-material-icon-theme`, pinned to a release tag. To bump it, check out the new tag in the submodule, then run `bun run generate && bun run validate-icons && bun run test`.
 - `src/generated/*.ts` is generated: don't edit it by hand.
-- Language IDs come from the upstream `languageIcons.ts`, expanded through the explicit upstream file associations, the `contributes.languages` of VS Code's built-in extensions, and a small hand-maintained map with cited sources (`packages/material-icon-resolver/scripts/language-id-extensions.ts`).
+- Language IDs come from the upstream `languageIcons.ts`, expanded through the explicit upstream file associations, the `contributes.languages` of VS Code's built-in extensions, and a small hand-maintained map with cited sources (`packages/path-icon/scripts/language-id-extensions.ts`).
 
 See [`AGENTS.md`](./AGENTS.md) for the full contributor guide.
 

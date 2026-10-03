@@ -1,6 +1,6 @@
 "use client";
 
-import type { CdnProvider, FallbackMode } from "material-icon-resolver";
+import type { CdnProvider, FallbackMode } from "path-icon";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";

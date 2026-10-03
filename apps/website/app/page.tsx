@@ -2,7 +2,7 @@ import {
   type ResolvedMaterialIcon,
   resolveMaterialIcon,
   resolveMaterialIconByLanguageId,
-} from "material-icon-resolver";
+} from "path-icon";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { Code } from "./_components/code";
@@ -12,7 +12,7 @@ import { InstallCommand } from "./_components/install-command";
 const NPM_URL = siteConfig.npm;
 const REPO_URL = siteConfig.repo;
 
-const USAGE = `import { resolveMaterialIcon } from "material-icon-resolver";
+const USAGE = `import { resolveMaterialIcon } from "path-icon";
 
 const icon = resolveMaterialIcon("src/index.ts");
 // icon.name     → "typescript"
@@ -71,8 +71,7 @@ const API: { signature: string; returns?: string; description: string }[] = [
     description: "Return only the SVG URL.",
   },
   {
-    signature:
-      'import { resolveMaterialFileIcon } from "material-icon-resolver/file";',
+    signature: 'import { resolveMaterialFileIcon } from "path-icon/file";',
     description:
       "Split entries load only the file or folder tables. /folder exports resolveMaterialFolderIcon.",
   },
@@ -147,7 +146,7 @@ export default function Home() {
       <div>
         <div className="space-y-5">
           <h1 className="font-medium tracking-tight text-foreground text-xl">
-            Material Icon Resolver
+            path-icon
           </h1>
           <p className="max-w-xl text-base leading-relaxed">
             npm library that resolves Material Icon Theme icon names, filenames,
@@ -156,7 +155,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-1.5 font-mono text-sm mt-6">
-          <InstallCommand cmd="npm i material-icon-resolver" />
+          <InstallCommand cmd="npm i path-icon" />
         </div>
 
         <div className="flex flex-wrap items-center gap-6 mt-6 *:text-sm *:text-muted-foreground *:hover:underline">
@@ -185,7 +184,7 @@ export default function Home() {
         <p className="text-sm text-muted-foreground">
           Ideal for file explorers, editor tabs, breadcrumbs, and any interface
           that displays files and folders. Every icon in the preview below is
-          resolved with material-icon-resolver.
+          resolved with path-icon.
         </p>
         <EditorPreview />
       </section>

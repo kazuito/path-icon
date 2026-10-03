@@ -1,4 +1,4 @@
-const FALLBACK_URL = "https://material-icon-resolver.vercel.app";
+const FALLBACK_URL = "https://path-icon.vercel.app";
 
 function resolveBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
@@ -14,8 +14,8 @@ function resolveBaseUrl(): string {
 }
 
 export const siteConfig = {
-  name: "Material Icon Resolver",
-  shortName: "material-icon-resolver",
+  name: "path-icon",
+  shortName: "path-icon",
   tagline: "Resolve Material Icon Theme icons from any path",
   description:
     "Resolve Material Icon Theme icon names, filenames, and CDN URLs from any file path, folder path, or language id. Open-source TypeScript library with an interactive playground.",
@@ -27,11 +27,11 @@ export const siteConfig = {
     url: "https://github.com/kazuito",
     twitter: "@kzito",
   },
-  repo: "https://github.com/kazuito/material-icon-resolver",
-  npm: "https://www.npmjs.com/package/material-icon-resolver",
+  repo: "https://github.com/kazuito/path-icon",
+  npm: "https://www.npmjs.com/package/path-icon",
   keywords: [
     "material icon theme",
-    "material icon resolver",
+    "path icon",
     "material icons",
     "vscode icons",
     "file icons",

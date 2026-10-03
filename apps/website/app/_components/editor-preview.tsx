@@ -1,4 +1,4 @@
-import { resolveMaterialIcon } from "material-icon-resolver";
+import { resolveMaterialIcon } from "path-icon";
 import { cn } from "@/lib/utils";
 import { Code } from "./code";
 
@@ -30,7 +30,7 @@ const TREE: { path: string; folder?: boolean; open?: boolean }[] = [
 
 const TABS = [ACTIVE_FILE, "src/index.ts", "package.json", "vite.config.ts"];
 
-const SOURCE = `import { resolveMaterialIcon } from "material-icon-resolver";
+const SOURCE = `import { resolveMaterialIcon } from "path-icon";
 
 export function FileIcon({ path }: { path: string }) {
   const { cdnUrl, name } = resolveMaterialIcon(path);

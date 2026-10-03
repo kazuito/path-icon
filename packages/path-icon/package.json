@@ -1,20 +1,20 @@
 {
-  "name": "material-icon-resolver",
-  "version": "0.1.9",
+  "name": "path-icon",
+  "version": "0.2.0",
   "description": "Resolve Material Icon Theme icon names, filenames, and CDN URLs from a file path, folder path, or language ID.",
   "author": {
     "name": "Kazuma Ito",
     "url": "https://github.com/kazuito"
   },
   "license": "MIT",
-  "homepage": "https://material-icon-resolver.vercel.app",
+  "homepage": "https://path-icon.vercel.app",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kazuito/material-icon-resolver.git",
-    "directory": "packages/material-icon-resolver"
+    "url": "git+https://github.com/kazuito/path-icon.git",
+    "directory": "packages/path-icon"
   },
   "bugs": {
-    "url": "https://github.com/kazuito/material-icon-resolver/issues"
+    "url": "https://github.com/kazuito/path-icon/issues"
   },
   "type": "module",
   "sideEffects": false,

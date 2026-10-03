@@ -13,4 +13,4 @@ pre-push:
     - run: bun run lint
     - run: bun run build
     - run: bun run typecheck
-    - run: bun run --cwd packages/material-icon-resolver validate-icons
+    - run: bun run --cwd packages/path-icon validate-icons

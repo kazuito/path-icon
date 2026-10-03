@@ -22,7 +22,7 @@ type VscodePackageJson = {
 
 async function fetchJson<T>(url: string): Promise<T> {
   const headers: Record<string, string> = {
-    "User-Agent": "material-icon-resolver sync-vscode-languages",
+    "User-Agent": "path-icon sync-vscode-languages",
   };
   const token = process.env.GITHUB_TOKEN;
   if (token) headers.Authorization = `Bearer ${token}`;

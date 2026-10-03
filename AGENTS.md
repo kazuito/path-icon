@@ -1,10 +1,10 @@
-# material-icon-resolver
+# path-icon
 
 Resolve VS Code Material Icon Theme icon names, SVG filenames, and CDN URLs from file or folder paths. TypeScript library with ESM and CommonJS builds, distributed via npm.
 
 Bun workspace monorepo:
 
-- `packages/material-icon-resolver/` — the published library. **All library paths below (`src/`, `scripts/`, `test/`, `vendor/`, `dist/`) are relative to this directory**, and library commands run from here.
+- `packages/path-icon/` — the published library. **All library paths below (`src/`, `scripts/`, `test/`, `vendor/`, `dist/`) are relative to this directory**, and library commands run from here.
 - `apps/website/` — Next.js docs site + playground (see `apps/website/AGENTS.md`). Vercel Root Directory: `apps/website`.
 - Root `package.json` only holds workspaces, lefthook (`lefthook.yml`), and `bun run --filter` fan-out scripts (`lint`, `format`, `typecheck`, `build`, `test`).
 - `README.md` / `LICENSE` live at the repo root; the library's `prepack` copies them into the package so npm ships them.
@@ -13,8 +13,8 @@ Bun workspace monorepo:
 
 - `src/index.ts` — public API re-exports
 - `src/resolve.ts` — `resolveMaterialIcon`, `getMaterialIconName`, `getMaterialIconCdnUrl`
-- `src/file.ts` — file-only resolver for `material-icon-resolver/file`; imports only file icon generated data
-- `src/folder.ts` — folder-only resolver for `material-icon-resolver/folder`; imports only folder icon generated data
+- `src/file.ts` — file-only resolver for `path-icon/file`; imports only file icon generated data
+- `src/folder.ts` — folder-only resolver for `path-icon/folder`; imports only folder icon generated data
 - `src/result.ts` — shared result / CDN URL construction
 - `src/normalize.ts` — path normalization, basename/parent split, extension candidates
 - `src/packed.ts` — `unpack` decoder for the brace-trie packed tables in `src/generated/*.ts`; also used by the generator's round-trip assertion
@@ -35,7 +35,7 @@ Bun workspace monorepo:
 ```bash
 git submodule update --init --recursive  # required before first generate
 bun install          # from the repo root
-# from packages/material-icon-resolver:
+# from packages/path-icon:
 bun run typecheck    # tsc --noEmit
 bun run test         # vitest run
 bun run build        # tsdown → ESM/CJS outputs for root, file, and folder entries
@@ -64,10 +64,10 @@ bun run format       # biome format --write
 
 ## Generator Setup
 
-- Upstream `material-extensions/vscode-material-icon-theme` lives as a git submodule at `packages/material-icon-resolver/vendor/vscode-material-icon-theme`, pinned to a specific release tag.
+- Upstream `material-extensions/vscode-material-icon-theme` lives as a git submodule at `packages/path-icon/vendor/vscode-material-icon-theme`, pinned to a specific release tag.
 - First time setup: `git submodule update --init --recursive`. Fresh clones should use `git clone --recurse-submodules ...`.
 - The generator imports `src/core/icons/{fileIcons,folderIcons,languageIcons}.ts` directly from the submodule's checked-out tree and records the submodule HEAD commit in `metadata.upstreamCommit`. No worktree is created.
-- To bump the upstream version: `cd packages/material-icon-resolver/vendor/vscode-material-icon-theme && git fetch --tags && git checkout v<new-version> && cd -`, then `git add packages/material-icon-resolver/vendor/vscode-material-icon-theme` and run `bun run generate`. **Always pin to a release tag** — the submodule's `main` HEAD often contains unreleased icons whose SVGs aren't yet on the CDN.
+- To bump the upstream version: `cd packages/path-icon/vendor/vscode-material-icon-theme && git fetch --tags && git checkout v<new-version> && cd -`, then `git add packages/path-icon/vendor/vscode-material-icon-theme` and run `bun run generate`. **Always pin to a release tag** — the submodule's `main` HEAD often contains unreleased icons whose SVGs aren't yet on the CDN.
 - `MATERIAL_ICON_THEME_REPO=/path/to/clone` is supported as an escape hatch (e.g. for testing against a local upstream working copy); when set, the script reads that path's HEAD instead of the submodule. Caller is responsible for checking out a sensible ref.
 
 ## Codebase Rules

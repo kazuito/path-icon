@@ -1,6 +1,6 @@
 # website
 
-`material-icon-resolver` のデモ / 動作確認ページ。入力したパスがどのアイコンに解決されるかを即座に確認できる。
+`path-icon` のデモ / 動作確認ページ。入力したパスがどのアイコンに解決されるかを即座に確認できる。
 
 ## スタック
 
@@ -8,7 +8,7 @@
 - Tailwind CSS v4
 - shadcn/ui (`base-nova` スタイル、内部は `@base-ui/react`)
 - Biome (lint / format)
-- 解析ライブラリ本体は bun workspace 経由で参照 (`material-icon-resolver: workspace:*`)
+- 解析ライブラリ本体は bun workspace 経由で参照 (`path-icon: workspace:*`)
 
 ## ディレクトリ構成
 
@@ -42,4 +42,4 @@ bun run --filter website lint     # biome lint
 bun run --filter website check    # biome check --write (Run this to check lint/format at once)
 ```
 
-ライブラリ側 (`packages/material-icon-resolver/src`) を編集したときは `bun run --filter material-icon-resolver build` で `dist/` を更新すると website 側に反映される。
+ライブラリ側 (`packages/path-icon/src`) を編集したときは `bun run --filter path-icon build` で `dist/` を更新すると website 側に反映される。

@@ -49,8 +49,8 @@ jobs:
         run: bun run typecheck
 
       - name: Validate icon inventory
-        run: bun run --cwd packages/material-icon-resolver validate-icons
+        run: bun run --cwd packages/path-icon validate-icons
 
       - name: Verify npm package contents
         run: npm pack --dry-run
-        working-directory: packages/material-icon-resolver
+        working-directory: packages/path-icon

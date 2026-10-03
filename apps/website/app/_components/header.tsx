@@ -1,4 +1,4 @@
-import { metadata } from "material-icon-resolver";
+import { metadata } from "path-icon";
 import Link from "next/link";
 
 export function Header() {
@@ -9,7 +9,7 @@ export function Header() {
           href="/"
           className="font-mono text-sm font-medium tracking-tight text-foreground"
         >
-          material-icon-resolver
+          path-icon
         </Link>
       </div>
       <div className="flex gap-4 font-mono ml-auto text-xs text-muted-foreground">
