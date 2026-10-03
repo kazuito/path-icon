@@ -543,23 +543,25 @@ A condensed, self-contained reference written for LLMs and coding agents is serv
 ```sh
 git clone --recurse-submodules https://github.com/kazuito/material-icon-resolver.git
 cd material-icon-resolver
-pnpm install
+bun install
 ```
+
+Bun workspace: the library lives in `packages/material-icon-resolver`, the website and playground in `apps/website`. Run library commands from `packages/material-icon-resolver`.
 
 | Command | What it does |
 | --- | --- |
-| `pnpm test` | Run the vitest suites |
-| `pnpm typecheck` | `tsc --noEmit` |
-| `pnpm build` | Build ESM/CJS + type declarations with tsdown |
-| `pnpm lint` / `pnpm format` | Biome |
-| `pnpm generate` | Regenerate `src/generated/*.ts` from the pinned upstream submodule |
-| `pnpm sync-vscode-languages` | Refresh the VS Code language-ID map, then regenerate |
-| `pnpm validate-icons` | Check that every referenced SVG exists in the published `material-icon-theme` tarball |
-| `pnpm --filter website dev` | Run the website and playground locally |
+| `bun run test` | Run the vitest suites |
+| `bun run typecheck` | `tsc --noEmit` |
+| `bun run build` | Build ESM/CJS + type declarations with tsdown |
+| `bun run lint` / `bun run format` | Biome |
+| `bun run generate` | Regenerate `src/generated/*.ts` from the pinned upstream submodule |
+| `bun run sync-vscode-languages` | Refresh the VS Code language-ID map, then regenerate |
+| `bun run validate-icons` | Check that every referenced SVG exists in the published `material-icon-theme` tarball |
+| `bun run --filter website dev` | Run the website and playground locally (from the repo root) |
 
-- Upstream lives as a git submodule at `vendor/vscode-material-icon-theme`, pinned to a release tag. To bump it, check out the new tag in the submodule, then run `pnpm generate && pnpm validate-icons && pnpm test`.
+- Upstream lives as a git submodule at `packages/material-icon-resolver/vendor/vscode-material-icon-theme`, pinned to a release tag. To bump it, check out the new tag in the submodule, then run `bun run generate && bun run validate-icons && bun run test`.
 - `src/generated/*.ts` is generated: don't edit it by hand.
-- Language IDs come from the upstream `languageIcons.ts`, expanded through the explicit upstream file associations, the `contributes.languages` of VS Code's built-in extensions, and a small hand-maintained map with cited sources (`scripts/language-id-extensions.ts`).
+- Language IDs come from the upstream `languageIcons.ts`, expanded through the explicit upstream file associations, the `contributes.languages` of VS Code's built-in extensions, and a small hand-maintained map with cited sources (`packages/material-icon-resolver/scripts/language-id-extensions.ts`).
 
 See [`AGENTS.md`](./AGENTS.md) for the full contributor guide.
 

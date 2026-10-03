@@ -1,0 +1,16 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: format
+      run: bun run format
+      stage_fixed: true
+    - run: bun run lint
+    - run: bun run typecheck
+
+pre-push:
+  piped: true
+  jobs:
+    - run: bun run lint
+    - run: bun run build
+    - run: bun run typecheck
+    - run: bun run --cwd packages/material-icon-resolver validate-icons

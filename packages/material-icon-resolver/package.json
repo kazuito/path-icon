@@ -1,0 +1,104 @@
+{
+  "name": "material-icon-resolver",
+  "version": "0.1.9",
+  "description": "Resolve Material Icon Theme icon names, filenames, and CDN URLs from a file path, folder path, or language ID.",
+  "author": {
+    "name": "Kazuma Ito",
+    "url": "https://github.com/kazuito"
+  },
+  "license": "MIT",
+  "homepage": "https://material-icon-resolver.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazuito/material-icon-resolver.git",
+    "directory": "packages/material-icon-resolver"
+  },
+  "bugs": {
+    "url": "https://github.com/kazuito/material-icon-resolver/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./file": {
+      "import": {
+        "types": "./dist/file.d.mts",
+        "default": "./dist/file.mjs"
+      },
+      "require": {
+        "types": "./dist/file.d.cts",
+        "default": "./dist/file.cjs"
+      }
+    },
+    "./folder": {
+      "import": {
+        "types": "./dist/folder.d.mts",
+        "default": "./dist/folder.mjs"
+      },
+      "require": {
+        "types": "./dist/folder.d.cts",
+        "default": "./dist/folder.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "typesVersions": {
+    "*": {
+      "file": [
+        "./dist/file.d.cts"
+      ],
+      "folder": [
+        "./dist/folder.d.cts"
+      ]
+    }
+  },
+  "keywords": [
+    "material-icon-theme",
+    "material-icons",
+    "vscode-icons",
+    "file-icons",
+    "folder-icons",
+    "icon-resolver"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "generate": "bun scripts/generate.ts",
+    "sync-vscode-languages": "bun scripts/sync-vscode-languages.ts && bun run generate",
+    "validate-icons": "bun scripts/validate-icons.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "check": "biome check --write && bun run typecheck && bun run test",
+    "prepublishOnly": "bun run typecheck && bun run test && bun run build",
+    "prepack": "cp ../../README.md ../../LICENSE ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "@types/node": "^26.5.0",
+    "tsdown": "^0.23.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}

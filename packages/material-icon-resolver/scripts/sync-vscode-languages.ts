@@ -1,7 +1,6 @@
-#!/usr/bin/env tsx
 // Regenerates scripts/generated/vscode-language-map.json from the
 // `contributes.languages` sections of VS Code's built-in extensions at a
-// pinned release tag. Bump VSCODE_TAG and re-run `pnpm sync-vscode-languages`
+// pinned release tag. Bump VSCODE_TAG and re-run `bun run sync-vscode-languages`
 // to pick up new built-in language associations.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";

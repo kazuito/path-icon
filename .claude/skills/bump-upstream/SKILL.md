@@ -21,7 +21,10 @@ submodule to a new release tag and regenerating — but doing it carelessly ship
 icon names whose SVGs don't exist on the CDN, so the steps below exist to make
 that impossible to miss.
 
-Read `AGENTS.md` ("Generator Setup" and "Safety / Gotchas") if you need deeper
+Run every command below from `packages/material-icon-resolver/` (the library
+package in this bun workspace); paths are relative to it unless noted.
+
+Read the root `AGENTS.md` ("Generator Setup" and "Safety / Gotchas") if you need deeper
 background; this skill is the operational checklist.
 
 ## The one rule that matters most
@@ -81,7 +84,7 @@ git submodule status                 # should show (v<new-version>)
 ### 4. Regenerate the association data
 
 ```bash
-pnpm generate
+bun run generate
 ```
 
 Watch the output:
@@ -97,7 +100,7 @@ Watch the output:
 ### 5. Validate every referenced SVG exists — the critical gate
 
 ```bash
-pnpm validate-icons
+bun run validate-icons
 ```
 
 This fetches the **published** `material-icon-theme@<new-version>` tarball from
@@ -112,7 +115,7 @@ release tag, or report the specific missing filenames to the user.
 ### 6. Typecheck, test, build
 
 ```bash
-pnpm typecheck && pnpm test && pnpm build
+bun run typecheck && bun run test && bun run build
 ```
 
 All three must pass. Tests include CDN-URL assertions; if a test now fails
@@ -127,11 +130,11 @@ The default `version` in the public API is pinned to the new
 output now prints an outdated version string. Find them:
 
 ```bash
-grep -rn "<old-version>" README.md src/ --include="*.ts" --include="*.md"
+grep -rn "<old-version>" ../../README.md src/ --include="*.ts" --include="*.md"
 ```
 
 Update references in:
-- `README.md` — default-output examples
+- `../../README.md` (repo root) — default-output examples
 - `src/resolve.ts` — JSDoc `@example` blocks showing default output
 - `src/cdn.ts` — JSDoc example + the `version` field doc (`e.g. "x.y.z"`)
 
@@ -151,11 +154,11 @@ pointer along with the generated files.
 
 - `vendor/vscode-material-icon-theme` — submodule pointer
 - `src/generated/{metadata,file-icons,folder-icons}.ts` — regenerated
-- `README.md`, `src/resolve.ts`, `src/cdn.ts` — doc version strings (if any)
+- `../../README.md`, `src/resolve.ts`, `src/cdn.ts` — doc version strings (if any)
 
 ## Escape hatch
 
-`MATERIAL_ICON_THEME_REPO=/path/to/clone pnpm generate` reads HEAD from an
+`MATERIAL_ICON_THEME_REPO=/path/to/clone bun run generate` reads HEAD from an
 external working copy instead of the submodule — useful for testing against a
 local upstream branch. The caller is responsible for checking out a sensible
 ref. The submodule + release-tag path is the normal one; reach for this only

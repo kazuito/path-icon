@@ -1,5 +1,0 @@
-pnpm lint
-pnpm typecheck
-
-pnpm --filter website lint
-pnpm --filter website typecheck

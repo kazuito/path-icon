@@ -1,8 +1,0 @@
-packages:
-  - "website"
-  - "."
-
-allowBuilds:
-  esbuild: true
-  msw: true
-  sharp: true

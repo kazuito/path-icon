@@ -1,4 +1,3 @@
-#!/usr/bin/env tsx
 import { execSync } from "node:child_process";
 import { mkdtempSync, readdirSync } from "node:fs";
 import { tmpdir } from "node:os";

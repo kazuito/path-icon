@@ -18,48 +18,39 @@ jobs:
     name: Quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      HUSKY: 0
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm typecheck
+        run: bun run lint
 
       - name: Test
-        run: pnpm test
+        run: bun run test
 
       - name: Build
-        run: pnpm build
+        run: bun run build
+
+      - name: Typecheck
+        run: bun run typecheck
 
       - name: Validate icon inventory
-        run: pnpm validate-icons
+        run: bun run --cwd packages/material-icon-resolver validate-icons
 
       - name: Verify npm package contents
-        run: pnpm pack --dry-run
-
-      - name: Lint (website)
-        run: pnpm --filter website lint
-
-      - name: Typecheck (website)
-        run: pnpm --filter website typecheck
-
-      - name: Build (website)
-        run: pnpm --filter website build
+        run: npm pack --dry-run
+        working-directory: packages/material-icon-resolver

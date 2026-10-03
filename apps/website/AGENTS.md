@@ -8,12 +8,12 @@
 - Tailwind CSS v4
 - shadcn/ui (`base-nova` スタイル、内部は `@base-ui/react`)
 - Biome (lint / format)
-- 解析ライブラリ本体は pnpm workspace 経由で参照 (`material-icon-resolver: workspace:*`)
+- 解析ライブラリ本体は bun workspace 経由で参照 (`material-icon-resolver: workspace:*`)
 
 ## ディレクトリ構成
 
 ```
-website/
+apps/website/
 ├── app/
 │   ├── _components/      # このページ専用のドメインコンポーネント
 │   │   ├── icon-resolver.tsx   # 状態を持つクライアントアイランド
@@ -36,10 +36,10 @@ website/
 ## 開発
 
 ```sh
-pnpm --filter website dev      # http://localhost:3000
-pnpm --filter website build
-pnpm --filter website lint     # biome lint
-pnpm --filter website check    # biome check --write (Run this to check lint/format at once)
+bun run --filter website dev      # http://localhost:3000
+bun run --filter website build
+bun run --filter website lint     # biome lint
+bun run --filter website check    # biome check --write (Run this to check lint/format at once)
 ```
 
-ライブラリ側 (`../src`) を編集したときは `pnpm --filter material-icon-resolver build` で `dist/` を更新すると website 側に反映される。
+ライブラリ側 (`packages/material-icon-resolver/src`) を編集したときは `bun run --filter material-icon-resolver build` で `dist/` を更新すると website 側に反映される。

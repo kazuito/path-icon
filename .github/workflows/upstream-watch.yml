@@ -33,7 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           # Currently pinned version (the generated table is built for this exact release).
-          current="$(grep -oP 'upstreamVersion:\s*"\K[^"]+' src/generated/metadata.ts)"
+          current="$(grep -oP 'upstreamVersion:\s*"\K[^"]+' packages/material-icon-resolver/src/generated/metadata.ts)"
           # Latest *published release* — never main HEAD, whose SVGs aren't on the CDN yet.
           latest_tag="$(gh api repos/material-extensions/vscode-material-icon-theme/releases/latest --jq .tag_name)"
           latest="${latest_tag#v}"
