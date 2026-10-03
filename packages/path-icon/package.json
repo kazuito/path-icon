@@ -1,6 +1,6 @@
 {
   "name": "path-icon",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Resolve Material Icon Theme icon names, filenames, and CDN URLs from a file path, folder path, or language ID.",
   "author": {
     "name": "Kazuma Ito",
