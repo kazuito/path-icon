@@ -177,6 +177,7 @@ export default function Home() {
           >
             GitHub
           </Link>
+          <a href="/llms.txt">llms.txt</a>
         </div>
       </div>
 
