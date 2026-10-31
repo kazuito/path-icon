@@ -11,7 +11,7 @@ Find the [Material Icon Theme](https://github.com/material-extensions/vscode-mat
 import { getIcon } from "path-icon";
 
 getIcon("src/index.ts").url;
-// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
+// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.40.0/icons/typescript.svg"
 ```
 
 ## Contents
@@ -78,7 +78,7 @@ getIcon("src/index.ts");
 // {
 //   name: "typescript",
 //   filename: "typescript.svg",
-//   url: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg",
+//   url: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.40.0/icons/typescript.svg",
 //   type: "file",
 //   source: "fileExtensions",
 // }
@@ -118,7 +118,7 @@ getIcon("package.json", { languageId: "rust" });        // → nodejs (filename 
 "src/app/page.tsx"
    │  normalize: "\" → "/", strip ?query / #hash and trailing "/", lowercase
    ▼
-lookup tables (generated from material-icon-theme@5.39.0, bundled in this package)
+lookup tables (generated from material-icon-theme@5.40.0, bundled in this package)
    │  parent/basename → basename → longest extension → languageId → fallback
    ▼
 icon name "react_ts"
@@ -205,10 +205,10 @@ getIcon("data.xyz").source;                 // "default"
 
 ### Self-hosting the SVGs
 
-If you don't want to depend on a public CDN, copy the SVGs from the upstream package and point `baseUrl` at them. Install the **same version** the tables were built from (`metadata.upstreamVersion`, currently `5.39.0`):
+If you don't want to depend on a public CDN, copy the SVGs from the upstream package and point `baseUrl` at them. Install the **same version** the tables were built from (`metadata.upstreamVersion`, currently `5.40.0`):
 
 ```sh
-npm install --save-dev material-icon-theme@5.39.0
+npm install --save-dev material-icon-theme@5.40.0
 cp -r node_modules/material-icon-theme/icons public/icons
 ```
 
@@ -237,7 +237,7 @@ getFolderIcon("src", { open: true });
 const { getFileIcon } = require("path-icon/file");
 ```
 
-Approximate gzipped size at `5.39.0`, including the lookup data:
+Approximate gzipped size at `5.40.0`, including the lookup data:
 
 | Entry | Contains | gzip |
 | --- | --- | --- |
@@ -292,8 +292,8 @@ function buildCdnUrl(input: { cdn: CdnProvider; version: string; filename: strin
 Build a CDN URL from a filename you already have.
 
 ```ts
-buildCdnUrl({ cdn: "jsdelivr", version: "5.39.0", filename: "typescript.svg" });
-// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg"
+buildCdnUrl({ cdn: "jsdelivr", version: "5.40.0", filename: "typescript.svg" });
+// "https://cdn.jsdelivr.net/npm/material-icon-theme@5.40.0/icons/typescript.svg"
 ```
 
 #### `joinBaseUrl(baseUrl, filename)`
@@ -316,7 +316,7 @@ Where the bundled tables came from:
 ```ts
 metadata;
 // {
-//   upstreamVersion: "5.39.0",          // also the default CDN `version`
+//   upstreamVersion: "5.40.0",          // also the default CDN `version`
 //   upstreamCommit: "92a9c5b2…",        // commit of the upstream release tag
 //   upstreamRepo: "material-extensions/vscode-material-icon-theme",
 //   generatedAt: "2026-…Z",             // ISO 8601 timestamp
@@ -359,7 +359,7 @@ Folder options: `cdn`, `version`, `baseUrl`, `open`, and `fallback: "folder" | "
 | `languageId` | `string` | — | Files only. VS Code language ID used when the path matches no filename or extension. A specific path match always wins. Ignored for folders. |
 | `fallback` | `"file" \| "folder" \| "none"` | matches `isFolder` | What to return when nothing matches: the generic `file` icon, the generic `folder` icon, or `null`. |
 | `cdn` | `"jsdelivr" \| "unpkg"` | `"jsdelivr"` | CDN used to build `url`. |
-| `version` | `string` | `metadata.upstreamVersion` (`"5.39.0"`) | `material-icon-theme` version in `url`. See [Versioning](#versioning-and-icon-data) before changing it. |
+| `version` | `string` | `metadata.upstreamVersion` (`"5.40.0"`) | `material-icon-theme` version in `url`. See [Versioning](#versioning-and-icon-data) before changing it. |
 | `baseUrl` | `string` | — | Build `url` as `<baseUrl>/<filename>` instead of using a CDN. Overrides `cdn` and `version`. |
 
 Which option types accept what:
@@ -447,7 +447,7 @@ Language IDs map to the icon VS Code shows for that language: `typescriptreact` 
 
 ## Versioning and icon data
 
-- **Pinned upstream.** Each release of this package is generated from one tagged release of `vscode-material-icon-theme`, currently **5.39.0**. You can check it at runtime with `metadata.upstreamVersion`.
+- **Pinned upstream.** Each release of this package is generated from one tagged release of `vscode-material-icon-theme`, currently **5.40.0**. You can check it at runtime with `metadata.upstreamVersion`.
 - **Why the CDN version is pinned too.** Upstream adds, renames, and occasionally removes icons. The bundled tables only know the icon names that exist in the pinned release, so `url` uses the same version by default. CI checks every referenced icon against the published npm tarball, so every default URL points at an SVG that exists.
 - **Using `version: "latest"`.** Allowed, but you mix this package's associations with a newer icon set. If upstream renames an icon, the URL may 404. Prefer upgrading this package instead.
 - **Staying current.** New upstream releases are tracked, and this package is regenerated and released for them. Update `path-icon` to get new icons and associations.

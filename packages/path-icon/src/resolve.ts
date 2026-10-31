@@ -28,7 +28,7 @@ import type { FallbackMode, IconOptions, PathIcon } from "./types.ts";
  * // {
  * //   name: "typescript",
  * //   filename: "typescript.svg",
- * //   url: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.39.0/icons/typescript.svg",
+ * //   url: "https://cdn.jsdelivr.net/npm/material-icon-theme@5.40.0/icons/typescript.svg",
  * //   type: "file",
  * //   source: "fileExtensions",
  * // }

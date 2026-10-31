@@ -116,8 +116,6 @@ export const languageIdAssociations: Record<string, LanguageIdAssoc> = {
   ets: { extensions: ["ets"] },
   // via Shader languages support (slevesque.shader) — https://github.com/stef-levesque/vscode-shader
   glsl: { extensions: ["vs"] },
-  // curated: gnuplot script extensions
-  gnuplot: { extensions: ["gnuplot", "plt", "plot"] },
   // via Hack (pranayagarwal.vscode-hack) — https://github.com/slackhq/vscode-hack
   hack: { extensions: ["hack", "hhi"] },
   // via Kubernetes (ms-kubernetes-tools.vscode-kubernetes-tools) — https://github.com/vscode-kubernetes-tools/vscode-kubernetes-tools
